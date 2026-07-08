@@ -8,7 +8,7 @@ interface Props {
 const { project } = Astro.props;
 
 const tagLabel = {
-  "case-study": "case study",
+  published: "published",
   "coming-soon": "coming soon",
   "in-progress": "in progress",
 }[project.tagKind];
@@ -21,12 +21,24 @@ const tagLabel = {
         <i></i><i></i><i></i>
         <span>{project.browserUrl}</span>
       </div>
-      <slot />
+      {project.image ? (
+        <div class="card-shot">
+          <img src={project.image} alt={project.imageAlt ?? project.name} loading="lazy" style={`object-fit: ${project.imageFit ?? "cover"};`} />
+        </div>
+      ) : (
+        <slot />
+      )}
     </div>
   ) : (
     <div class="browser-chrome flex justify-center py-5">
       <div class="w-[92px] rounded-[20px] overflow-hidden" style="border: 6px solid var(--ink); aspect-ratio: 9/18.5;">
-        <slot />
+        {project.image ? (
+          <div class="card-shot card-shot--logo">
+            <img src={project.image} alt={project.imageAlt ?? project.name} loading="lazy" style={`object-fit: ${project.imageFit ?? "cover"};`} />
+          </div>
+        ) : (
+          <slot />
+        )}
       </div>
     </div>
   )}
@@ -36,7 +48,7 @@ const tagLabel = {
       <div class="t">{project.name}</div>
       <div class="s">{project.tagline}</div>
     </div>
-    <span class={`tag ${project.tagKind !== "case-study" ? "tag-warm" : ""}`}>{tagLabel}</span>
+    <span class={`tag ${project.tagKind !== "published" ? "tag-warm" : ""}`}>{tagLabel}</span>
   </div>
 
   {project.statPrimary.label && (

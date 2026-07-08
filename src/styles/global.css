@@ -398,6 +398,34 @@
     box-shadow: 0 2px 5px rgba(22, 26, 29, 0.18);
   }
 
+  /* —— real screenshots / logos inside a project card —— */
+  .card-shot {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--base-hi);
+  }
+  .card-shot img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .card-shot--logo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    aspect-ratio: auto;
+  }
+  .card-shot--logo img {
+    width: 68%;
+    height: 68%;
+    border-radius: 22%;
+    box-shadow: 0 6px 16px rgba(22, 26, 29, 0.18);
+  }
+
   .eyebrow {
     font-family: "JetBrains Mono", monospace;
     font-size: 12.5px;
