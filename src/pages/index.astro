@@ -1,0 +1,118 @@
+---
+import Base from "@/layouts/Base.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import { projects } from "@/data/projects";
+
+const itb = projects.find((p) => p.slug === "in-the-beginning")!;
+const rest = projects.filter((p) => p.slug !== "in-the-beginning");
+---
+
+<Base
+  title="Ethan Jung — Full-stack web development"
+  description="Full-stack web development for small businesses and nonprofits. Built by hand, one project at a time."
+>
+  <div class="max-w-[1080px] mx-auto px-8">
+    <section class="grid md:grid-cols-[1.15fr_.85fr] gap-11 items-center pt-16 pb-14 md:pt-24 md:pb-20">
+      <div>
+        <span class="pill glass-strong">
+          <span class="pill-dot"></span> Available — taking on new projects
+        </span>
+        <h1 class="text-[38px] md:text-[58px] leading-[1.03] mt-5 mb-5">
+          Websites for the businesses I'd actually <em class="em-accent">recommend.</em>
+        </h1>
+        <p class="text-[18px] max-w-[36ch] mb-8" style="color: var(--ink-soft);">
+          Full-stack web development for small businesses and nonprofits — built properly, by one person who picks up the phone.
+        </p>
+        <div class="flex items-center gap-5 flex-wrap">
+          <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+          <a class="link-ghost" href="#work">See the work <span class="arr">→</span></a>
+        </div>
+      </div>
+
+      <ProjectCard project={itb}>
+        <div class="studio">
+          <div class="canvas">
+            <div class="guide-v"></div>
+            <div class="guide-h"></div>
+            <span class="guide-tag">eye line</span>
+            <div class="head"></div>
+            <div class="shoulders"></div>
+          </div>
+          <div class="controls">
+            <div class="control">
+              <label>Head size <span>62%</span></label>
+              <div class="track"><span class="fill" style="width:62%"></span><span class="knob" style="left:62%"></span></div>
+            </div>
+            <div class="control">
+              <label>Eye line <span>34%</span></label>
+              <div class="track"><span class="fill" style="width:34%"></span><span class="knob" style="left:34%"></span></div>
+            </div>
+          </div>
+        </div>
+      </ProjectCard>
+    </section>
+
+    <section id="work" class="py-16 md:py-20 scroll-mt-24">
+      <h2 class="eyebrow mb-4">Selected work</h2>
+      <p class="text-[17px] max-w-[52ch] mb-10" style="color: var(--ink-soft);">
+        A few of the projects I've built end to end — design, code, and the unglamorous infrastructure in between.
+      </p>
+
+      <div class="grid sm:grid-cols-2 gap-6">
+        {rest.map((project) => (
+          <ProjectCard project={project}>
+            {project.frame === "phone" ? (
+              <div class="lineshot" style="padding: 14px 12px;">
+                <div class="ln a" style="width:70%"></div>
+                <div class="ln b"></div>
+                <div class="ln c"></div>
+                <div class="ln b" style="width:60%"></div>
+              </div>
+            ) : (
+              <div class="lineshot">
+                <div class="ln a"></div>
+                <div class="ln b"></div>
+                <div class="ln c"></div>
+                <div class="chip-row"><div class="chip fill"></div><div class="chip"></div><div class="chip"></div></div>
+              </div>
+            )}
+          </ProjectCard>
+        ))}
+      </div>
+    </section>
+
+    <section id="approach" class="py-16 md:py-20 scroll-mt-24">
+      <h2 class="eyebrow mb-4">How I work</h2>
+      <div class="grid sm:grid-cols-3 gap-6 mt-8">
+        <div class="project-card glass">
+          <p class="font-semibold text-[16px] mb-2">One point of contact</p>
+          <p class="text-[14.5px]" style="color: var(--ink-soft);">
+            No account managers, no handoffs. You talk to the person writing the code, from the first call to the last deploy.
+          </p>
+        </div>
+        <div class="project-card glass">
+          <p class="font-semibold text-[16px] mb-2">Built to last</p>
+          <p class="text-[14.5px]" style="color: var(--ink-soft);">
+            No page builders held together with plugins. Real code, version controlled, that you actually own.
+          </p>
+        </div>
+        <div class="project-card glass">
+          <p class="font-semibold text-[16px] mb-2">Honest scope</p>
+          <p class="text-[14.5px]" style="color: var(--ink-soft);">
+            I'll tell you what you don't need. A smaller site that ships beats a big one that stalls.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-16 md:py-24">
+      <div class="project-card glass text-center px-8 py-14 md:py-16">
+        <h2 class="text-[30px] md:text-[38px] mb-4">Have a project in mind?</h2>
+        <p class="text-[16px] max-w-[42ch] mx-auto mb-8" style="color: var(--ink-soft);">
+          Tell me what you're trying to build. I'll tell you honestly whether I'm the right fit.
+        </p>
+        <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+      </div>
+    </section>
+  </div>
+</Base>

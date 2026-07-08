@@ -1,0 +1,134 @@
+---
+import Base from "@/layouts/Base.astro";
+---
+
+<Base
+  title="In The Beginning — case study — Ethan Jung"
+  description="Full-stack volunteer registration, admin, and portrait-standardization platform built for a nonprofit, In The Beginning."
+>
+  <div class="max-w-[760px] mx-auto px-8 pt-16 pb-24">
+    <a href="/#work" class="link-ghost text-[14px] mb-8">
+      <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
+    </a>
+
+    <span class="tag">case study</span>
+    <h1 class="text-[36px] md:text-[46px] mt-5 mb-3">In The Beginning</h1>
+    <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
+      Complete digital infrastructure for a nonprofit — volunteer registration, an internal operations hub, and an
+      in-browser tool that fixed a problem no one else was solving.
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-12">
+      {["Next.js 16", "TypeScript", "Supabase / Postgres", "Tailwind CSS", "Vercel"].map((t) => (
+        <span class="tag">{t}</span>
+      ))}
+      <a href="https://inthebegin.org" target="_blank" rel="noopener" class="tag" style="text-decoration: none;">
+        inthebegin.org ↗
+      </a>
+    </div>
+
+    <div class="project-card glass mb-14">
+      <div class="browser-chrome">
+        <div class="browser-chrome__bar"><i></i><i></i><i></i><span>inthebegin.org/admin · portraits</span></div>
+        <div class="studio" style="padding: 26px 22px;">
+          <div class="canvas" style="width: 150px;">
+            <div class="guide-v"></div>
+            <div class="guide-h"></div>
+            <span class="guide-tag">eye line</span>
+            <div class="head" style="width:62px;height:62px;"></div>
+            <div class="shoulders" style="width:120px;height:58px;"></div>
+          </div>
+          <div class="controls">
+            <div class="control">
+              <label>Head size <span>62%</span></label>
+              <div class="track"><span class="fill" style="width:62%"></span><span class="knob" style="left:62%"></span></div>
+            </div>
+            <div class="control">
+              <label>Eye line <span>34%</span></label>
+              <div class="track"><span class="fill" style="width:34%"></span><span class="knob" style="left:34%"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div><b>$0</b><small>per-image cost · in-browser WASM</small></div>
+        <div><b>800×1000</b><small>every portrait, auto-standardized</small></div>
+      </div>
+    </div>
+
+    <div class="prose-case">
+      <h2>The problem</h2>
+      <p>
+        In The Beginning ran its volunteer program the way most small nonprofits do: scattered spreadsheets, email
+        threads, and a volunteer photo gallery where every headshot looked different — inconsistent head sizes,
+        mismatched backgrounds, eyes never lining up from one card to the next. There was no single system for intake,
+        review, or publishing, and no one on staff to run one by hand.
+      </p>
+
+      <h2>Volunteer registration & profile system</h2>
+      <p>
+        I built a multi-step registration flow with server-side validation, honeypot spam protection, rate limiting,
+        and case-insensitive duplicate detection. It supports a full lifecycle — new registration, admin review,
+        approval, profile updates, reactivation — and nothing a volunteer edits goes live unreviewed. Profile changes
+        are staged in a <code>pending_update</code> JSONB column until an admin approves them.
+      </p>
+
+      <h2>Admin dashboard</h2>
+      <p>
+        A secure admin interface sits behind a signed HMAC session cookie — no third-party auth vendor in the loop.
+        It gives staff a full volunteer management queue (approve, archive, restore, delete), diff visibility on
+        pending profile edits, blog-submission moderation with an editor allowlist, and site settings management, all
+        behind one authentication layer.
+      </p>
+
+      <h2>The portrait standardization studio</h2>
+      <p>
+        This is the piece I'm proudest of. Every volunteer headshot now gets automatically scaled to a consistent
+        head size with eyes pinned to a fixed vertical position on a branded canvas — entirely in the browser, at zero
+        per-image cost. It uses <code>@imgly/background-removal</code> (WebAssembly) to strip backgrounds client-side
+        and a self-hosted MediaPipe BlazeFace model (229KB) for face detection. The expensive AI step runs once per
+        photo and caches the cutout; the Head Size and Eye Line sliders then recompose the canvas instantly on every
+        tick, redrawing from the cached cutout instead of rerunning detection. Admins can auto-standardize in bulk,
+        manually crop against an eye-line alignment guide, convert HEIC files through a server fallback, or replace
+        just the background at native resolution — with defaults saved per admin.
+      </p>
+      <p>
+        The org had been eating into a paid image API (remove.bg) with 49 of 50 free calls sitting unused in
+        production. Moving the whole pipeline to free, unlimited in-browser WebAssembly eliminated that cost
+        entirely — while producing a more consistent result than the paid API had.
+      </p>
+
+      <h2>Blog submissions</h2>
+      <p>
+        Members submit posts through a public form; submissions land in a moderation queue. Editors — allowlisted by
+        email and PIN — publish approved posts directly. Archived posts are restorable; deleted posts are permanent.
+      </p>
+
+      <h2>Engineering decisions worth mentioning</h2>
+      <p>
+        Server-side HEIC-to-WebP conversion via <code>heic-convert</code> and <code>sharp</code>, with a 10MB body
+        limit on server actions — processed images go to Supabase Storage while the originals are preserved
+        separately for non-destructive re-editing. Postgres runs with Row Level Security; the service role key never
+        leaves the server, and the anon key is strictly read-only on the public frontend. A Vercel cron job pings
+        <code>/api/keep-alive</code> on a schedule to stop the free-tier database from pausing.
+      </p>
+      <p>
+        One production bug took real digging: volunteer profile submissions were silently failing because writes to
+        a column that didn't exist — <code>updated_at</code> — were failing quietly. I diagnosed it by querying the
+        live schema directly through the Supabase REST API rather than guessing from the code.
+      </p>
+
+      <h2>Impact</h2>
+      <p>
+        A fragmented manual process became a structured digital workflow for intake, profile management, and content
+        publishing — and every volunteer portrait now carries a consistent visual identity, with no ongoing cost and
+        no manual editing effort.
+      </p>
+    </div>
+
+    <div class="mt-16 flex items-center gap-5">
+      <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
+    </div>
+  </div>
+</Base>

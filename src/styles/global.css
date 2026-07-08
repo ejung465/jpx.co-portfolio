@@ -1,0 +1,468 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ink: #161a1d;
+    --ink-soft: #5c656d;
+    --ink-faint: #9aa2aa;
+    --base: #e7ebf0;
+    --base-hi: #f5f7fa;
+    --base-lo: #c8cdd6;
+    --surface: #f3f5f8;
+    --accent: #4763c9;
+    --accent-deep: #2a3c82;
+    --accent-soft: #e3e8fb;
+    --warm: #c2603d;
+
+    --glass: rgba(255, 255, 255, 0.55);
+    --glass-strong: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.75);
+    --glass-line: rgba(22, 26, 29, 0.1);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--base);
+    color: var(--ink);
+    font-family: "Hanken Grotesk", system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--accent-deep);
+  }
+}
+
+@layer components {
+  /* —— backdrop: blueprint grid + intentional light field, never a rainbow blob —— */
+  .bg-blueprint {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .bg-blueprint__grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--glass-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--glass-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(120% 90% at 70% 10%, #000 30%, transparent 80%);
+    mask-image: radial-gradient(120% 90% at 70% 10%, #000 30%, transparent 80%);
+    opacity: 0.5;
+  }
+  .bg-blueprint__glow {
+    position: absolute;
+    width: 760px;
+    height: 760px;
+    border-radius: 50%;
+    top: -220px;
+    right: -160px;
+    background: radial-gradient(circle at center, rgba(71, 99, 201, 0.28), rgba(71, 99, 201, 0) 62%);
+    filter: blur(8px);
+  }
+  .bg-blueprint__glow--warm {
+    top: auto;
+    right: auto;
+    bottom: -320px;
+    left: -220px;
+    width: 680px;
+    height: 680px;
+    background: radial-gradient(circle at center, rgba(194, 96, 61, 0.16), rgba(194, 96, 61, 0) 60%);
+  }
+
+  /* —— glass surfaces: used sparingly (nav, one card, one pill) —— */
+  .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    backdrop-filter: blur(18px) saturate(1.5);
+    border: 1px solid var(--glass-border);
+  }
+  .glass-strong {
+    background: var(--glass-strong);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .site-nav {
+    position: sticky;
+    top: 18px;
+    z-index: 30;
+    margin: 18px auto 0;
+    max-width: 1080px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px 12px 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(22, 26, 29, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  .nav-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: #fff;
+    background: var(--ink);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink);
+    padding: 6px 13px;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(22, 26, 29, 0.06);
+  }
+  .pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #27c08a;
+    box-shadow: 0 0 0 3px rgba(39, 192, 138, 0.18);
+  }
+
+  /* —— neumorphic button: one tactile control, used for the primary action only —— */
+  .btn-neu {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    cursor: pointer;
+    background: var(--base);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 14px;
+    padding: 15px 26px;
+    box-shadow: -6px -6px 14px var(--base-hi), 6px 6px 16px var(--base-lo);
+    transition: box-shadow 0.18s, transform 0.1s;
+  }
+  .btn-neu:hover {
+    box-shadow: -4px -4px 10px var(--base-hi), 4px 4px 12px var(--base-lo);
+  }
+  .btn-neu:active {
+    transform: translateY(1px);
+    box-shadow: inset -4px -4px 10px var(--base-hi), inset 4px 4px 10px var(--base-lo);
+  }
+
+  .link-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .link-ghost .arr {
+    transition: transform 0.2s;
+  }
+  .link-ghost:hover .arr {
+    transform: translateX(4px);
+  }
+
+  /* —— project card: glass, holds a browser-chrome mockup + meta + stats —— */
+  .project-card {
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: 0 20px 50px rgba(22, 26, 29, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  }
+  .browser-chrome {
+    background: var(--base-hi);
+    border: 1px solid var(--glass-line);
+    border-radius: 13px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(22, 26, 29, 0.08);
+  }
+  .browser-chrome__bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--glass-line);
+  }
+  .browser-chrome__bar i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--base-lo);
+  }
+  .browser-chrome__bar span {
+    margin-left: 8px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--ink-faint);
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 8px 6px;
+  }
+  .project-meta .t {
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .project-meta .s {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--accent-deep);
+    background: var(--accent-soft);
+    padding: 4px 9px;
+    border-radius: 7px;
+  }
+  .tag-warm {
+    color: #6b3521;
+    background: #f6e3da;
+  }
+  .stat-row {
+    display: flex;
+    gap: 22px;
+    padding: 14px 8px 4px;
+    border-top: 1px solid var(--glass-line);
+    margin-top: 10px;
+  }
+  .stat-row b {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: 22px;
+    display: block;
+    line-height: 1;
+  }
+  .stat-row small {
+    font-size: 11.5px;
+    color: var(--ink-soft);
+  }
+
+  /* —— thin-line placeholder illustration, standing in for a screenshot —— */
+  .lineshot {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .ln {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent-soft), transparent);
+  }
+  .ln.a {
+    width: 55%;
+    background: var(--accent);
+    opacity: 0.85;
+    height: 11px;
+  }
+  .ln.b {
+    width: 88%;
+  }
+  .ln.c {
+    width: 72%;
+  }
+  .chip-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .chip {
+    height: 34px;
+    flex: 1;
+    border: 1px solid var(--glass-line);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .chip.fill {
+    background: var(--accent);
+    opacity: 0.9;
+    border: none;
+  }
+
+  /* —— portrait standardization studio: the ITB wow visual —— */
+  .studio {
+    padding: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .canvas {
+    position: relative;
+    width: 104px;
+    flex: none;
+    aspect-ratio: 4 / 5;
+    background: #f0e9dc;
+    border: 1px solid var(--glass-line);
+    border-radius: 9px;
+    overflow: hidden;
+  }
+  .guide-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px dashed rgba(22, 26, 29, 0.22);
+  }
+  .guide-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 32%;
+    border-top: 1px dashed var(--accent);
+  }
+  .guide-tag {
+    position: absolute;
+    top: calc(32% - 15px);
+    right: 5px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--accent-deep);
+    background: var(--accent-soft);
+    padding: 1px 5px;
+    border-radius: 5px;
+  }
+  .head {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    opacity: 0.78;
+  }
+  .shoulders {
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    transform: translateX(-50%);
+    width: 86px;
+    height: 42px;
+    border: 1.5px solid var(--ink);
+    border-bottom: none;
+    border-radius: 44px 44px 0 0;
+    opacity: 0.78;
+  }
+  .controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+  .control label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .track {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--base-lo);
+    position: relative;
+  }
+  .track .fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+  .track .knob {
+    position: absolute;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--glass-line);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 5px rgba(22, 26, 29, 0.18);
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-deep);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .em-accent {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .prose-case p {
+    color: var(--ink-soft);
+    margin-bottom: 1.1em;
+  }
+  .prose-case h2 {
+    font-size: 26px;
+    margin: 2.2em 0 0.6em;
+    color: var(--ink);
+  }
+  .prose-case h2:first-child {
+    margin-top: 0;
+  }
+
+  /* —— form controls —— */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .field input,
+  .field textarea,
+  .field select {
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--base-hi);
+    border: 1px solid var(--glass-line);
+    border-radius: 11px;
+    padding: 12px 14px;
+    box-shadow: inset -2px -2px 6px var(--base-hi), inset 2px 2px 8px var(--base-lo);
+    transition: box-shadow 0.15s, border-color 0.15s;
+  }
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+}

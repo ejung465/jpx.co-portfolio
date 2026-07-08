@@ -1,0 +1,56 @@
+---
+import type { Project } from "@/data/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+
+const tagLabel = {
+  "case-study": "case study",
+  "coming-soon": "coming soon",
+  "in-progress": "in progress",
+}[project.tagKind];
+---
+
+<a href={project.href} class="project-card glass block hover:-translate-y-0.5 transition-transform" style="text-decoration: none; color: inherit;">
+  {project.frame === "browser" ? (
+    <div class="browser-chrome">
+      <div class="browser-chrome__bar">
+        <i></i><i></i><i></i>
+        <span>{project.browserUrl}</span>
+      </div>
+      <slot />
+    </div>
+  ) : (
+    <div class="browser-chrome flex justify-center py-5">
+      <div class="w-[92px] rounded-[20px] overflow-hidden" style="border: 6px solid var(--ink); aspect-ratio: 9/18.5;">
+        <slot />
+      </div>
+    </div>
+  )}
+
+  <div class="project-meta">
+    <div>
+      <div class="t">{project.name}</div>
+      <div class="s">{project.tagline}</div>
+    </div>
+    <span class={`tag ${project.tagKind !== "case-study" ? "tag-warm" : ""}`}>{tagLabel}</span>
+  </div>
+
+  {project.statPrimary.label && (
+    <div class="stat-row">
+      <div>
+        <b>{project.statPrimary.value}</b>
+        <small>{project.statPrimary.label}</small>
+      </div>
+      {project.statSecondary.label && (
+        <div>
+          <b>{project.statSecondary.value}</b>
+          <small>{project.statSecondary.label}</small>
+        </div>
+      )}
+    </div>
+  )}
+</a>

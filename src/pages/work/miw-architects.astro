@@ -1,0 +1,59 @@
+---
+import Base from "@/layouts/Base.astro";
+import DraftNote from "@/components/DraftNote.astro";
+---
+
+<Base
+  title="MIW Architects — case study — Ethan Jung"
+  description="Studio website and project gallery built for MIW Architects."
+>
+  <div class="max-w-[760px] mx-auto px-8 pt-16 pb-24">
+    <a href="/#work" class="link-ghost text-[14px] mb-8">
+      <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
+    </a>
+
+    <span class="tag">case study</span>
+    <h1 class="text-[36px] md:text-[46px] mt-5 mb-3">MIW Architects</h1>
+    <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
+      A minimalist marketing site and project gallery for an architecture studio — built to let the work speak
+      for itself.
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-10">
+      <a href="https://miwarchitects.com" target="_blank" rel="noopener" class="tag" style="text-decoration: none;">
+        miwarchitects.com ↗
+      </a>
+    </div>
+
+    <div class="project-card glass mb-10">
+      <div class="browser-chrome">
+        <div class="browser-chrome__bar"><i></i><i></i><i></i><span>miwarchitects.com</span></div>
+        <div class="lineshot">
+          <div class="ln a"></div>
+          <div class="ln b"></div>
+          <div class="ln c"></div>
+          <div class="chip-row"><div class="chip fill"></div><div class="chip"></div><div class="chip"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <DraftNote>
+      This case study needs your input: what did you specifically build — full site, redesign, the project gallery,
+      the CMS? What was the studio's brief, and what mattered most to them (fast-loading galleries? easy self-editing
+      for new projects? something else)? Tell me and I'll write the real story.
+    </DraftNote>
+
+    <div class="prose-case">
+      <h2>What's live</h2>
+      <p>
+        The site keeps navigation simple — Home, Projects, About, Contact, Blog — and leans on visual content over
+        heavy text, with a project gallery as the centerpiece and social links to Instagram, Facebook, and LinkedIn.
+      </p>
+    </div>
+
+    <div class="mt-16 flex items-center gap-5">
+      <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
+    </div>
+  </div>
+</Base>

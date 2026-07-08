@@ -1,0 +1,42 @@
+---
+import Base from "@/layouts/Base.astro";
+import DraftNote from "@/components/DraftNote.astro";
+---
+
+<Base
+  title="NH Small Claims — case study — Ethan Jung"
+  description="Self-help resource for small claims court, in progress."
+>
+  <div class="max-w-[760px] mx-auto px-8 pt-16 pb-24">
+    <a href="/#work" class="link-ghost text-[14px] mb-8">
+      <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
+    </a>
+
+    <span class="tag tag-warm">in progress</span>
+    <h1 class="text-[36px] md:text-[46px] mt-5 mb-3">NH Small Claims</h1>
+    <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
+      A self-help resource for people navigating small claims court on their own.
+    </p>
+
+    <div class="project-card glass mb-10">
+      <div class="browser-chrome">
+        <div class="browser-chrome__bar"><i></i><i></i><i></i><span>nhsmallclaims.org</span></div>
+        <div class="lineshot">
+          <div class="ln a"></div>
+          <div class="ln b"></div>
+          <div class="ln c"></div>
+        </div>
+      </div>
+    </div>
+
+    <DraftNote>
+      nhsmallclaims.org isn't resolving yet (checked a few domain variants too — none are live). Once it's up, or
+      you tell me what it's meant to do, who it's for, and your role, I'll write the real case study.
+    </DraftNote>
+
+    <div class="mt-16 flex items-center gap-5">
+      <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
+    </div>
+  </div>
+</Base>

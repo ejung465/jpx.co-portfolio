@@ -1,0 +1,99 @@
+---
+import Base from "@/layouts/Base.astro";
+import DraftNote from "@/components/DraftNote.astro";
+---
+
+<Base
+  title="Contact — Ethan Jung"
+  description="Get in touch about a full-stack web development project."
+>
+  <div class="max-w-[640px] mx-auto px-8 pt-16 pb-24">
+    <span class="eyebrow mb-4">Get in touch</span>
+    <h1 class="text-[36px] md:text-[46px] mt-4 mb-4">Let's talk about your project.</h1>
+    <p class="text-[17px] mb-10" style="color: var(--ink-soft);">
+      Tell me what you're building. I read every message myself and reply within a day or two.
+    </p>
+
+    <DraftNote label="Setup">
+      To go live, this form needs a <code>RESEND_API_KEY</code> environment variable (from
+      <a href="https://resend.com" target="_blank" rel="noopener" style="color: var(--accent-deep);">resend.com</a>)
+      set in your Vercel project settings. Until then it'll show a friendly error telling people to email you
+      directly.
+    </DraftNote>
+
+    <form id="contact-form" class="project-card glass mt-8 flex flex-col gap-5">
+      <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+      <div class="field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+
+      <div class="field">
+        <label for="projectType">Project type</label>
+        <select id="projectType" name="projectType">
+          <option value="New website">New website</option>
+          <option value="Redesign">Redesign / rebuild</option>
+          <option value="Web application">Web application</option>
+          <option value="Ongoing help">Ongoing help / maintenance</option>
+          <option value="Not sure yet">Not sure yet</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="message">What are you trying to build?</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </div>
+
+      <button type="submit" class="btn-neu" id="contact-submit">Send message</button>
+      <p id="contact-status" class="text-[14px]" style="color: var(--ink-soft);"></p>
+    </form>
+
+    <p class="text-center mt-10 text-[14.5px]" style="color: var(--ink-soft);">
+      Prefer to talk it through first? Email me directly at
+      <a href="mailto:ethanjung2028@gmail.com" style="color: var(--accent-deep);">ethanjung2028@gmail.com</a>.
+    </p>
+  </div>
+</Base>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  const status = document.getElementById("contact-status");
+  const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!status || !submitBtn) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+    status.textContent = "";
+
+    try {
+      const res = await fetch("/api/contact", { method: "POST", body: new FormData(form) });
+      const result = await res.json();
+
+      if (result.ok) {
+        form.reset();
+        status.textContent = "Thanks — I'll get back to you within a day or two.";
+        status.style.color = "var(--accent-deep)";
+        submitBtn.textContent = "Sent";
+      } else {
+        status.textContent = result.error ?? "Something went wrong. Try again shortly.";
+        status.style.color = "var(--warm)";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send message";
+      }
+    } catch {
+      status.textContent = "Something went wrong. Try again shortly.";
+      status.style.color = "var(--warm)";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send message";
+    }
+  });
+</script>

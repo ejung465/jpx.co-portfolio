@@ -1,0 +1,45 @@
+---
+import Base from "@/layouts/Base.astro";
+import DraftNote from "@/components/DraftNote.astro";
+---
+
+<Base
+  title="Alloy Mentors — case study — Ethan Jung"
+  description="Mobile app, coming soon to the App Store."
+>
+  <div class="max-w-[760px] mx-auto px-8 pt-16 pb-24">
+    <a href="/#work" class="link-ghost text-[14px] mb-8">
+      <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
+    </a>
+
+    <span class="tag tag-warm">coming soon</span>
+    <h1 class="text-[36px] md:text-[46px] mt-5 mb-3">Alloy Mentors</h1>
+    <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
+      A mobile app currently in development, heading to the App Store.
+    </p>
+
+    <div class="project-card glass mb-10">
+      <div class="browser-chrome flex justify-center py-6">
+        <div class="w-[120px] rounded-[24px] overflow-hidden" style="border: 6px solid var(--ink); aspect-ratio: 9/18.5;">
+          <div class="lineshot" style="padding: 14px 10px;">
+            <div class="ln a" style="width:70%"></div>
+            <div class="ln b"></div>
+            <div class="ln c"></div>
+            <div class="ln b" style="width:60%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <DraftNote>
+      Needs your input: what does Alloy Mentors actually do, who's it for, and what's your role — sole builder,
+      technical co-founder, something else? Once I know the product, I'll write a real teaser instead of a
+      placeholder.
+    </DraftNote>
+
+    <div class="mt-16 flex items-center gap-5">
+      <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
+    </div>
+  </div>
+</Base>
