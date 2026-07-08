@@ -39,7 +39,9 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     await resend.emails.send({
-      from: "Portfolio contact form <contact@ethanjung.dev>",
+      // Resend's shared sandbox sender — works with no domain verification.
+      // Once jpxco.dev is verified in Resend, switch this to e.g. contact@jpxco.dev.
+      from: "Portfolio contact form <onboarding@resend.dev>",
       to: TO_EMAIL,
       replyTo: email,
       subject: `New inquiry from ${name}${projectType ? ` — ${projectType}` : ""}`,
