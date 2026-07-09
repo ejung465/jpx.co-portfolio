@@ -1,6 +1,5 @@
 ---
 import Base from "@/layouts/Base.astro";
-import DraftNote from "@/components/DraftNote.astro";
 ---
 
 <Base
@@ -29,10 +28,17 @@ import DraftNote from "@/components/DraftNote.astro";
       </div>
     </div>
 
-    <DraftNote>
-      nhsmallclaims.org isn't resolving yet (checked a few domain variants too — none are live). Once it's up, or
-      you tell me what it's meant to do, who it's for, and your role, I'll write the real case study.
-    </DraftNote>
+    <div class="prose-case">
+      <h2>What it is</h2>
+      <p>
+        Small claims court is designed to be navigable without a lawyer, but "designed to be" and "actually is"
+        are different things. This project is a self-help guide to walk people through the process on their own —
+        currently in progress, not yet live.
+      </p>
+      <p>
+        Full write-up lands here once it's launched.
+      </p>
+    </div>
 
     <div class="mt-16 flex items-center gap-5">
       <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>

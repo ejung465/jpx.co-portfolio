@@ -1,6 +1,5 @@
 ---
 import Base from "@/layouts/Base.astro";
-import DraftNote from "@/components/DraftNote.astro";
 ---
 
 <Base
@@ -14,14 +13,7 @@ import DraftNote from "@/components/DraftNote.astro";
       Tell me what you're building. I read every message myself and reply within a day or two.
     </p>
 
-    <DraftNote label="Setup">
-      To go live, this form needs a <code>RESEND_API_KEY</code> environment variable (from
-      <a href="https://resend.com" target="_blank" rel="noopener" style="color: var(--accent-deep);">resend.com</a>)
-      set in your Vercel project settings. Until then it'll show a friendly error telling people to email you
-      directly.
-    </DraftNote>
-
-    <form id="contact-form" class="project-card glass mt-8 flex flex-col gap-5">
+    <form id="contact-form" class="project-card glass flex flex-col gap-5">
       <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
       <div class="field">

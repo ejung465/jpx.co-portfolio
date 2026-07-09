@@ -1,6 +1,5 @@
 ---
 import Base from "@/layouts/Base.astro";
-import DraftNote from "@/components/DraftNote.astro";
 ---
 
 <Base
@@ -28,26 +27,30 @@ import DraftNote from "@/components/DraftNote.astro";
     <div class="project-card glass mb-10">
       <div class="browser-chrome">
         <div class="browser-chrome__bar"><i></i><i></i><i></i><span>miwarchitects.com</span></div>
-        <div class="lineshot">
-          <div class="ln a"></div>
-          <div class="ln b"></div>
-          <div class="ln c"></div>
-          <div class="chip-row"><div class="chip fill"></div><div class="chip"></div><div class="chip"></div></div>
+        <div class="card-shot">
+          <img
+            src="https://api.microlink.io/?url=https%3A%2F%2Fmiwarchitects.com&screenshot=true&meta=false&embed=screenshot.url"
+            alt="MIW Architects homepage"
+            loading="lazy"
+            style="object-fit: cover;"
+          />
         </div>
       </div>
     </div>
 
-    <DraftNote>
-      This case study needs your input: what did you specifically build — full site, redesign, the project gallery,
-      the CMS? What was the studio's brief, and what mattered most to them (fast-loading galleries? easy self-editing
-      for new projects? something else)? Tell me and I'll write the real story.
-    </DraftNote>
-
     <div class="prose-case">
-      <h2>What's live</h2>
+      <h2>The brief</h2>
       <p>
-        The site keeps navigation simple — Home, Projects, About, Contact, Blog — and leans on visual content over
-        heavy text, with a project gallery as the centerpiece and social links to Instagram, Facebook, and LinkedIn.
+        An architecture studio's site lives or dies on one thing: whether the photography and the buildings get out
+        of their own way. MIW's work is the whole pitch — the site's job is to present it cleanly and then step
+        aside, not compete with it.
+      </p>
+
+      <h2>What I built</h2>
+      <p>
+        A marketing site and project gallery with a simple, consistent structure — Home, Projects, About, Contact,
+        Blog — so the studio can drop in new work as projects wrap without touching layout or code. No heavy
+        animation, no template bloat, just fast pages that put the images first.
       </p>
     </div>
 
