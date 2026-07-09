@@ -105,16 +105,11 @@
     border-radius: 16px;
     box-shadow: 0 8px 30px rgba(22, 26, 29, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
   }
-  .nav-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: 9px;
-    display: grid;
-    place-items: center;
-    font-family: "JetBrains Mono", monospace;
-    font-size: 13px;
-    color: #fff;
-    background: var(--ink);
+  .nav-logo {
+    width: 68px;
+    height: 34px;
+    object-fit: cover;
+    object-position: center;
   }
 
   .pill {
