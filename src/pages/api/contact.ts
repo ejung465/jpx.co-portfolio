@@ -16,6 +16,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const name = String(data.get("name") ?? "").trim();
   const email = String(data.get("email") ?? "").trim();
+  const phone = String(data.get("phone") ?? "").trim();
   const projectType = String(data.get("projectType") ?? "").trim();
   const message = String(data.get("message") ?? "").trim();
 
@@ -45,7 +46,7 @@ export const POST: APIRoute = async ({ request }) => {
       to: TO_EMAIL,
       replyTo: email,
       subject: `New inquiry from ${name}${projectType ? ` — ${projectType}` : ""}`,
-      text: `From: ${name} <${email}>\nProject type: ${projectType || "n/a"}\n\n${message}`,
+      text: `From: ${name} <${email}>\nPhone: ${phone || "not provided"}\nProject type: ${projectType || "n/a"}\n\n${message}`,
     });
   } catch {
     return new Response(JSON.stringify({ ok: false, error: "Something went wrong sending that. Try again shortly." }), {

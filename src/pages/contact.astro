@@ -27,6 +27,11 @@ import Base from "@/layouts/Base.astro";
       </div>
 
       <div class="field">
+        <label for="phone">Phone <span style="font-weight: 400; color: var(--ink-faint);">(optional, so I can call you back)</span></label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" />
+      </div>
+
+      <div class="field">
         <label for="projectType">Project type</label>
         <select id="projectType" name="projectType">
           <option value="New website">New website</option>
@@ -47,8 +52,10 @@ import Base from "@/layouts/Base.astro";
     </form>
 
     <p class="text-center mt-10 text-[14.5px]" style="color: var(--ink-soft);">
-      Prefer to talk it through first? Email me directly at
-      <a href="mailto:ethanjung2028@gmail.com" style="color: var(--accent-deep);">ethanjung2028@gmail.com</a>.
+      Prefer to talk it through first? Email
+      <a href="mailto:info@jpxco.dev" style="color: var(--accent-deep);">info@jpxco.dev</a>
+      or call
+      <a href="tel:+12247249020" style="color: var(--accent-deep);">(224) 724-9020</a>.
     </p>
   </div>
 </Base>
