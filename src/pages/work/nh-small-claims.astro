@@ -4,39 +4,71 @@ import Base from "@/layouts/Base.astro";
 
 <Base
   title="NH Small Claims — case study — JPX Web Development Co."
-  description="Self-help resource for small claims court, in progress."
+  description="Self-help website for New Hampshire small claims court, built for a Dartmouth College student volunteer project."
 >
   <div class="max-w-[760px] mx-auto px-8 pt-16 pb-24">
     <a href="/#work" class="link-ghost text-[14px] mb-8">
       <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
     </a>
 
-    <span class="tag tag-warm">in progress</span>
+    <span class="tag">published</span>
     <h1 class="text-[36px] md:text-[46px] mt-5 mb-3">NH Small Claims</h1>
     <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
-      A self-help resource for people navigating small claims court on their own.
+      Free, plain-language self-help guide for New Hampshire small claims court — built for a Dartmouth College
+      student volunteer project.
     </p>
+
+    <div class="flex flex-wrap gap-2 mb-10">
+      <a href="https://nhsmallclaims.org" target="_blank" rel="noopener" class="tag" style="text-decoration: none;">
+        nhsmallclaims.org ↗
+      </a>
+    </div>
 
     <div class="project-card glass mb-10">
       <div class="browser-chrome">
         <div class="browser-chrome__bar"><i></i><i></i><i></i><span>nhsmallclaims.org</span></div>
-        <div class="lineshot">
-          <div class="ln a"></div>
-          <div class="ln b"></div>
-          <div class="ln c"></div>
+        <div class="card-shot">
+          <img
+            src="https://api.microlink.io/?url=https%3A%2F%2Fnhsmallclaims.org&screenshot=true&meta=false&embed=screenshot.url"
+            alt="NH Small Claims homepage"
+            loading="lazy"
+            style="object-fit: cover;"
+          />
         </div>
       </div>
     </div>
 
     <div class="prose-case">
-      <h2>What it is</h2>
+      <h2>The org</h2>
       <p>
-        Small claims court is designed to be navigable without a lawyer, but "designed to be" and "actually is"
-        are different things. This project is a self-help guide to walk people through the process on their own —
-        currently in progress, not yet live.
+        NH Small Claims is a volunteer project run by Dartmouth College students, aimed at making New Hampshire's
+        small claims process easier to navigate for people representing themselves — no lawyer, no legal advice,
+        just clear, plain-language information kept up to date in one place.
       </p>
+
+      <h2>The problem</h2>
       <p>
-        Full write-up lands here once it's launched.
+        Small claims court is designed to be usable without a lawyer, but "designed to be" and "actually is" are
+        different things — the process, forms, and terminology are scattered across sources that assume you
+        already know how courts work. The site's job is to close that gap for whoever's filing a claim or just got
+        served with one.
+      </p>
+
+      <h2>What I built</h2>
+      <p>
+        A resource site structured around the actual questions people show up with: an FAQ covering filing,
+        responding, hearings, and appeals; a court lookup to find the right District Division court for your town;
+        a resources section for mediation services and free or low-cost legal aid; and an About page explaining who
+        runs the site and why. The homepage leads with exactly what it helps with — who can file, what happens
+        after you're served, how judgments get collected — so people can tell in ten seconds whether they're in the
+        right place.
+      </p>
+
+      <h2>Impact</h2>
+      <p>
+        A student volunteer team now has a live, working legal self-help resource for an entire state's small
+        claims process — not a mockup or a class project sitting unused, but a real site real people can use to
+        figure out what to do next.
       </p>
     </div>
 
