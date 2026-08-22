@@ -1,76 +1,35 @@
 ---
-import Base from "@/layouts/Base.astro";
+import CaseStudy from "@/layouts/CaseStudy.astro";
+import { projects } from "@/data/projects";
+
+const project = projects.find((p) => p.slug === "miw-architects")!;
 ---
 
-<Base
-  title="MIW Architects — case study — JPX Web Development Co."
-  description="Studio website and project gallery built for MIW Architects, a Chicago-based architecture firm working across commercial, residential, and development projects."
->
-  <div class="max-w-[760px] mx-auto px-8 pt-24 pb-28 md:pt-32">
-    <a href="/#work" class="link-ghost text-[14px] mb-8">
-      <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
-    </a>
-
-    <span class="tag">published</span>
-    <h1 class="text-[42px] md:text-[58px] leading-[1.05] mt-6 mb-4">MIW Architects</h1>
-    <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
-      A minimalist marketing site and project gallery for a Chicago-based architecture studio — built to let the
-      work speak for itself.
+<CaseStudy project={project}>
+  <div class="prose-case mt-20">
+    <h2>The practice</h2>
+    <p>
+      MIW works across commercial, residential, and mixed-use development from Chicago, with projects
+      reaching New York and Seoul. Restaurant design is a particular specialty — the studio runs market
+      research and feasibility studies and assembles investor-facing presentation packages alongside the
+      architecture itself. On the residential side it's mostly renovation and new construction, with a
+      high proportion of returning clients.
     </p>
 
-    <div class="rule mb-9"></div>
+    <h2>The brief</h2>
+    <p>
+      An architecture studio's site lives or dies on one question: whether the photography and the
+      buildings are allowed to do the talking. The work is the entire pitch. The interface's job is to
+      present it cleanly and then get out of the way.
+    </p>
 
-    <div class="flex flex-wrap gap-2 mb-10">
-      <a href="https://miwarchitects.com" target="_blank" rel="noopener" class="tag" style="text-decoration: none;">
-        miwarchitects.com ↗
-      </a>
-    </div>
-
-    <div class="project-card glass mb-10">
-      <div class="browser-chrome">
-        <div class="browser-chrome__bar"><i></i><i></i><i></i><span>miwarchitects.com</span></div>
-        <div class="card-shot">
-          <img
-            src="https://api.microlink.io/?url=https%3A%2F%2Fmiwarchitects.com&screenshot=true&meta=false&embed=screenshot.url"
-            alt="MIW Architects homepage"
-            loading="lazy"
-            style="object-fit: cover;"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="prose-case">
-      <h2>The firm</h2>
-      <p>
-        MIW is a Chicago-based architectural design firm that works across commercial, residential, and mixed-use
-        development — with projects reaching as far as New York and Seoul. They specialize in restaurant design in
-        particular, running market research and feasibility studies and putting together investor-facing
-        presentation packages alongside the architecture itself. On the residential side, it's mostly renovations
-        and new construction, with a lot of returning clients.
-      </p>
-
-      <h2>The brief</h2>
-      <p>
-        An architecture studio's site lives or dies on one thing: whether the photography and the buildings get out
-        of their own way. MIW's work is the whole pitch — the site's job is to present it cleanly and then step
-        aside, not compete with it.
-      </p>
-
-      <h2>What I built</h2>
-      <p>
-        A marketing site and project gallery with a simple, consistent structure — Home, Projects, About, Contact,
-        Blog — organized around how MIW actually categorizes their work: commercial (restaurant, cafe, spa,
-        daycare, office), residential (new construction, rehab, renovation), development (mixed-use, multi-family),
-        and custom artwork and furniture. The projects page leads with a video reel of built work in motion, then
-        drops into real photography for each category — moody restaurant interiors, gabled residential exteriors —
-        so the studio can add new work as projects wrap without touching layout or code.
-      </p>
-    </div>
-
-    <div class="mt-16 flex items-center gap-5">
-      <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
-      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
-    </div>
+    <h2>What I built</h2>
+    <p>
+      A gallery-first studio site organized around the categories MIW actually sells against — commercial
+      (restaurant, cafe, spa, daycare, office), residential (new construction, rehab, renovation),
+      development (mixed-use, multi-family), and custom artwork and fabrication. The projects page opens on
+      a reel of built work in motion before resolving into stills. Adding a finished project is a content
+      change, not a layout change, so the gallery grows without a developer in the loop.
+    </p>
   </div>
-</Base>
+</CaseStudy>

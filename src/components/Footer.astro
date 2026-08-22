@@ -1,32 +1,58 @@
 ---
 const year = 2026;
+
+// The footer carries navigation now that the header rail is gone.
+const links = [
+  { href: "/#work", label: "Work" },
+  { href: "/#principal", label: "Principal" },
+  { href: "/contact", label: "Contact" },
+];
 ---
 
-<footer class="mt-28">
-  <div
-    class="max-w-[1080px] mx-auto px-8 py-12 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-8"
-    style="border-top: 1px solid var(--glass-line);"
-  >
-    <div>
-      <p class="font-serif text-[26px] leading-none">JPX</p>
-      <p class="font-mono text-[9.5px] uppercase mt-3" style="letter-spacing: 0.3em; color: var(--ink-faint);">
-        Web Development Co.
+<footer class="mt-24">
+  <div class="shell" style="border-top: 1px solid var(--glass-line);">
+    <!-- masthead -->
+    <div class="pt-20 text-center">
+      <p class="font-serif leading-none" style="font-size: 64px;">JPX</p>
+      <p
+        class="font-mono uppercase mt-4"
+        style="font-size: var(--t-micro); letter-spacing: 0.34em; color: var(--ink-faint);"
+      >
+        Website Development Co.
       </p>
     </div>
 
-    <div class="flex flex-wrap items-center gap-x-7 gap-y-2 font-mono text-[10px] uppercase" style="letter-spacing: 0.18em; color: var(--ink-faint);">
-      <a href="mailto:info@jpxco.dev" class="foot-link transition-colors">info@jpxco.dev</a>
-      <a href="tel:+12247249020" class="foot-link transition-colors">(224) 724-9020</a>
-      <a href="/contact" class="foot-link transition-colors">Book a call</a>
+    <!-- navigation + contact -->
+    <div
+      class="mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono uppercase"
+      style="border-top: 1px solid var(--glass-line); font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
+    >
+      <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+        {links.map((l) => <a href={l.href} class="foot-link">{l.label}</a>)}
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+        <a href="mailto:info@jpxco.dev" class="foot-link">info@jpxco.dev</a>
+        <a href="tel:+12247249020" class="foot-link">(224) 724-9020</a>
+      </div>
+    </div>
+
+    <!-- colophon line -->
+    <div class="py-12 text-center font-mono uppercase" style="color: var(--ink-faint);">
+      <p style="font-size: var(--t-micro); letter-spacing: var(--track-label);">
+        A product of JPX Website Development Co.
+      </p>
+      <p class="mt-2" style="font-size: var(--t-nano); letter-spacing: 0.26em; opacity: 0.72;">All rights reserved</p>
+      <p class="mt-3" style="font-size: var(--t-nano); letter-spacing: 0.26em; opacity: 0.72;">© {year}</p>
     </div>
   </div>
-
-  <p class="text-center font-mono text-[9.5px] uppercase pb-10" style="letter-spacing: 0.22em; color: var(--ink-faint);">
-    © {year} JPX Web Development Co. · All Rights Reserved
-  </p>
 </footer>
 
 <style>
+  .foot-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.18s ease;
+  }
   .foot-link:hover {
     color: var(--accent);
   }

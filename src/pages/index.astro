@@ -9,26 +9,26 @@ const approach = [
     body: "No account managers, no handoffs. You talk to the person writing the code, from the first call to the last deploy.",
   },
   {
-    title: "Built to last",
-    body: "No page builders held together with plugins. Real code, version controlled, on infrastructure you actually own.",
+    title: "Built to be handed over",
+    body: "Software is only finished when the people who own it can run it alone. Every build ships with an interface its stewards can operate without an engineer present.",
   },
   {
-    title: "Honest scope",
-    body: "I'll tell you what you don't need. A smaller site that ships beats a larger one that stalls in review.",
+    title: "Durable by default",
+    body: "Conventional architecture, infrastructure you own, and no dependency that cannot be replaced. What is built this year should still be maintainable long after.",
   },
 ];
 ---
 
 <Base
-  title="JPX Web Development Co. — Full-stack web development"
+  title="JPX Website Development Co. — Full-stack web development"
   description="Full-stack web development for small businesses and nonprofits. Built properly, by one person who picks up the phone."
 >
-  <div class="max-w-[1080px] mx-auto px-8">
-    <!-- ── Masthead ─────────────────────────────────────────────── -->
+  <div class="shell">
+    <!-- ── Masthead ─────────────────────────────────────────── -->
     <section class="pt-24 pb-24 md:pt-36 md:pb-32">
-      <span class="pill glass-strong">
-        <span class="pill-dot"></span> Available — taking on new projects
-      </span>
+      <p class="availability">
+        <span class="availability__dot"></span> Available — taking on new projects
+      </p>
 
       <h1 class="text-[42px] md:text-[68px] leading-[1.04] mt-8 max-w-[15ch]">
         Full-stack web development for small businesses <em class="em-accent">and nonprofits.</em>
@@ -36,91 +36,51 @@ const approach = [
 
       <div class="rule mt-10"></div>
 
-      <p class="text-[16px] md:text-[17px] max-w-[46ch] mt-9 leading-relaxed" style="color: var(--ink-soft);">
+      <p class="lede max-w-[46ch] mt-8">
         Built properly, by one person who picks up the phone — design, code, and the unglamorous
         infrastructure in between.
       </p>
 
-      <div class="flex items-center gap-7 flex-wrap mt-11">
-        <a href="/contact" class="btn-neu">Book a 20-min call</a>
+      <div class="flex items-center gap-8 flex-wrap mt-10">
+        <a href="/contact" class="btn">Book a 20-min call</a>
         <a class="link-ghost" href="#work">See the work <span class="arr">→</span></a>
       </div>
     </section>
 
-    <!-- ── Selected work ────────────────────────────────────────── -->
-    <section id="work" class="scroll-mt-28 py-20 md:py-24" style="border-top: 1px solid var(--glass-line);">
-      <div class="grid gap-12 md:grid-cols-[10rem_1fr]">
+    <!-- ── Selected work ────────────────────────────────────── -->
+    <section id="work" class="section scroll-mt-28">
+      <div class="rail">
         <p class="eyebrow pt-1">Selected work</p>
 
         <div>
-          <p class="text-[16px] max-w-[52ch] mb-12 leading-relaxed" style="color: var(--ink-soft);">
-            A few of the projects I've built end to end — the interface, the data layer, and the
-            administrative tooling the client actually runs day to day.
+          <p class="max-w-[52ch] mb-10" style="color: var(--ink-soft);">
+            Four engagements, built end to end — the interface, the data layer, and the administrative
+            tooling the client actually runs day to day.
           </p>
 
           <div class="grid sm:grid-cols-2 gap-5">
             {projects.map((project) => (
-              <ProjectCard project={project}>
-                {project.slug === "in-the-beginning" ? (
-                  <div class="studio">
-                    <div class="canvas">
-                      <div class="guide-v"></div>
-                      <div class="guide-h"></div>
-                      <span class="guide-tag">eye line</span>
-                      <div class="head"></div>
-                      <div class="shoulders"></div>
-                    </div>
-                    <div class="controls">
-                      <div class="control">
-                        <label>Head size <span>62%</span></label>
-                        <div class="track"><span class="fill" style="width:62%"></span><span class="knob" style="left:62%"></span></div>
-                      </div>
-                      <div class="control">
-                        <label>Eye line <span>34%</span></label>
-                        <div class="track"><span class="fill" style="width:34%"></span><span class="knob" style="left:34%"></span></div>
-                      </div>
-                    </div>
-                  </div>
-                ) : project.frame === "phone" ? (
-                  <div class="lineshot" style="padding: 14px 12px;">
-                    <div class="ln a" style="width:70%"></div>
-                    <div class="ln b"></div>
-                    <div class="ln c"></div>
-                    <div class="ln b" style="width:60%"></div>
-                  </div>
-                ) : (
-                  <div class="lineshot">
-                    <div class="ln a"></div>
-                    <div class="ln b"></div>
-                    <div class="ln c"></div>
-                    <div class="chip-row"><div class="chip fill"></div><div class="chip"></div><div class="chip"></div></div>
-                  </div>
-                )}
-              </ProjectCard>
+              <div class={project.wide ? "sm:col-span-2" : ""}>
+                <ProjectCard project={project} />
+              </div>
             ))}
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ── Approach ─────────────────────────────────────────────── -->
-    <section id="approach" class="scroll-mt-28 py-20 md:py-24" style="border-top: 1px solid var(--glass-line);">
-      <div class="grid gap-12 md:grid-cols-[10rem_1fr]">
+    <!-- ── How I work ───────────────────────────────────────── -->
+    <section id="approach" class="section scroll-mt-28">
+      <div class="rail">
         <p class="eyebrow pt-1">How I work</p>
 
-        <div class="grid gap-px overflow-hidden rounded-[10px]" style="background: var(--glass-line);">
+        <div class="numbered">
           {approach.map((item, i) => (
-            <div class="approach-row px-7 py-8 transition-colors" style="background: var(--base);">
-              <div class="flex items-baseline gap-6">
-                <span class="font-serif text-[19px] flex-none" style="color: rgba(200,169,106,.55);">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h3 class="text-[24px] md:text-[26px]">{item.title}</h3>
-                  <p class="text-[15px] mt-3 max-w-[58ch] leading-relaxed" style="color: var(--ink-soft);">
-                    {item.body}
-                  </p>
-                </div>
+            <div class="numbered__row">
+              <span class="numbered__n">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
               </div>
             </div>
           ))}
@@ -128,23 +88,79 @@ const approach = [
       </div>
     </section>
 
-    <!-- ── Close ────────────────────────────────────────────────── -->
-    <section class="py-24 md:py-32 text-center" style="border-top: 1px solid var(--glass-line);">
-      <h2 class="text-[38px] md:text-[52px] leading-[1.08] max-w-[18ch] mx-auto">
-        Have a project <em class="em-accent">in mind?</em>
-      </h2>
-      <p class="text-[16px] max-w-[44ch] mx-auto mt-7 leading-relaxed" style="color: var(--ink-soft);">
-        Tell me what you're trying to build. I'll tell you honestly whether I'm the right fit.
-      </p>
-      <div class="mt-11">
-        <a href="/contact" class="btn-neu">Book a 20-min call</a>
+    <!-- ── Principal ────────────────────────────────────────── -->
+    <section id="principal" class="section scroll-mt-28">
+      <div class="rail">
+        <p class="eyebrow pt-1">Principal</p>
+
+        <div>
+          <h2 class="text-[32px] md:text-[40px]">Ethan Jung</h2>
+          <p
+            class="font-mono uppercase mt-3"
+            style="font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
+          >
+            Founder · Systems Architect
+          </p>
+
+          <div class="prose-case mt-8 max-w-[62ch]">
+            <p>
+              JPX is me. I design and build websites and web applications for small businesses and
+              nonprofits — not templated marketing pages, but the infrastructure underneath: registration
+              flows, admin dashboards, and the unglamorous plumbing that makes an organization's day-to-day
+              actually work.
+            </p>
+            <p>
+              Single point of authorship on every engagement, from the first wireframe to production —
+              interface design, application architecture, data modeling, infrastructure, and the editorial
+              systems that keep a site current after launch. This site is a fair sample of the standard: the
+              type ramp, the grid, and the case studies were all built the same way I'd build yours.
+            </p>
+            <p>
+              Small businesses and nonprofits get the same rate, the same code quality, and the same
+              attention. I don't treat one as charity work and the other as the real job — and if a project
+              isn't a good fit, I'll say so upfront instead of taking it anyway.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Enquiries ────────────────────────────────────────── -->
+    <section class="section">
+      <div class="rail">
+        <p class="eyebrow pt-1">Enquiries</p>
+
+        <div>
+          <h2 class="text-[32px] md:text-[44px] max-w-[20ch]">
+            Have a project <em class="em-accent">in mind?</em>
+          </h2>
+          <p class="max-w-[46ch] mt-6" style="color: var(--ink-soft);">
+            Tell me what you're trying to build. I'll tell you honestly whether I'm the right fit.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-8 mt-10">
+            <a href="/contact" class="btn">Book a 20-min call</a>
+            <div
+              class="flex flex-wrap items-center gap-x-8 gap-y-2 font-mono uppercase"
+              style="font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
+            >
+              <a href="mailto:info@jpxco.dev" class="enq-link">info@jpxco.dev</a>
+              <a href="tel:+12247249020" class="enq-link">(224) 724-9020</a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 </Base>
 
 <style>
-  .approach-row:hover {
-    background: #0e1424 !important;
+  .enq-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.18s ease;
+  }
+  .enq-link:hover {
+    color: var(--accent);
   }
 </style>

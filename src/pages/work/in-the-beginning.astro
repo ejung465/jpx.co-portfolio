@@ -1,152 +1,52 @@
 ---
-import Base from "@/layouts/Base.astro";
+import CaseStudy from "@/layouts/CaseStudy.astro";
+import { projects } from "@/data/projects";
+
+const project = projects.find((p) => p.slug === "in-the-beginning")!;
 ---
 
-<Base
-  title="In The Beginning — case study — JPX Web Development Co."
-  description="Full-stack volunteer registration, admin, and portrait-standardization platform built for In The Beginning, a student-led nonprofit supporting refugee students."
->
-  <div class="max-w-[760px] mx-auto px-8 pt-24 pb-28 md:pt-32">
-    <a href="/#work" class="link-ghost text-[14px] mb-8">
-      <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
-    </a>
-
-    <span class="tag">published</span>
-    <h1 class="text-[42px] md:text-[58px] leading-[1.05] mt-6 mb-4">In The Beginning</h1>
-    <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
-      Complete digital infrastructure for a nonprofit — volunteer registration, an internal operations hub, and an
-      in-browser tool that fixed a problem no one else was solving.
+<CaseStudy project={project}>
+  <div class="prose-case mt-20">
+    <h2>The organization</h2>
+    <p>
+      In The Beginning is a student-led 501(c)(3) in the Chicago area, tutoring refugee and displaced
+      students in English, science, and math, and offering music and string-instrument instruction
+      alongside mentoring. It is run by high schoolers — the founder and president was still in high school
+      through this engagement — which is exactly why the gap between what the organization needed and what
+      it could maintain was so wide.
     </p>
 
-    <div class="rule mb-9"></div>
+    <h2>The problem</h2>
+    <p>
+      The volunteer program ran the way most student-led nonprofits run: spreadsheets, email threads, and a
+      public roster assembled by hand. There was no single system for intake, review, or publishing, and
+      nobody on staff whose job was to run one. Anything that required a developer to operate would be
+      abandoned the moment the person who built it graduated.
+    </p>
 
-    <div class="flex flex-wrap gap-2 mb-12">
-      {["Next.js 16", "TypeScript", "MongoDB", "Cloudflare R2", "Tailwind CSS", "Vercel"].map((t) => (
-        <span class="tag">{t}</span>
-      ))}
-      <a href="https://inthebegin.org" target="_blank" rel="noopener" class="tag" style="text-decoration: none;">
-        inthebegin.org ↗
-      </a>
-    </div>
+    <h2>What it does</h2>
+    <p>
+      Volunteers apply through a multi-step public form with server-side validation, rate limiting, and
+      duplicate detection. Applications enter a review queue; nothing reaches the public roster unreviewed.
+      Profile edits from existing volunteers are staged rather than applied, so an administrator sees a
+      clear diff before anything changes in public. Members submit written pieces through the same pattern,
+      and an allowlisted set of editors publishes them.
+    </p>
+    <p>
+      Portraits are the part I'm most pleased with. Headshots arrive from a dozen phones at a dozen
+      distances, and a roster where every face sits at a different scale looks careless no matter how good
+      the underlying design is. Every image is normalized in the browser before upload — scaled to a
+      consistent crop with the subject placed on a fixed line — so the roster reads as one set. It runs
+      client-side at no per-image cost and with no third-party image service in the path. The
+      <a href="https://inthebegin.org/volunteers" target="_blank" rel="noopener noreferrer">volunteer roster</a>
+      on their site is the live output of that pipeline, not a mockup.
+    </p>
 
-    <div class="project-card glass mb-14">
-      <div class="browser-chrome">
-        <div class="browser-chrome__bar"><i></i><i></i><i></i><span>inthebegin.org/admin · portraits</span></div>
-        <div class="studio" style="padding: 26px 22px;">
-          <div class="canvas" style="width: 150px;">
-            <div class="guide-v"></div>
-            <div class="guide-h"></div>
-            <span class="guide-tag">eye line</span>
-            <div class="head" style="width:62px;height:62px;"></div>
-            <div class="shoulders" style="width:120px;height:58px;"></div>
-          </div>
-          <div class="controls">
-            <div class="control">
-              <label>Head size <span>62%</span></label>
-              <div class="track"><span class="fill" style="width:62%"></span><span class="knob" style="left:62%"></span></div>
-            </div>
-            <div class="control">
-              <label>Eye line <span>34%</span></label>
-              <div class="track"><span class="fill" style="width:34%"></span><span class="knob" style="left:34%"></span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="stat-row">
-        <div><b>$0</b><small>per-image cost · in-browser WASM</small></div>
-        <div><b>800×1000</b><small>every portrait, auto-standardized</small></div>
-      </div>
-    </div>
-
-    <div class="prose-case">
-      <h2>The org</h2>
-      <p>
-        In The Beginning is a student-led 501(c)(3) nonprofit based in the Chicago area, tutoring refugee students in
-        English, science, and math, and offering music and string-instrument lessons alongside mentoring. It's run by
-        high schoolers — the org's founder and president was still in high school when I built this — which is part
-        of why the gap between what they needed and what they had was so wide.
-      </p>
-
-      <h2>The problem</h2>
-      <p>
-        The volunteer program ran the way most small, student-led nonprofits do: scattered spreadsheets, email
-        threads, and a volunteer photo gallery where every headshot looked different — inconsistent head sizes,
-        mismatched backgrounds, eyes never lining up from one card to the next. There was no single system for intake,
-        review, or publishing, and no one on staff to run one by hand.
-      </p>
-
-      <h2>Volunteer registration & profile system</h2>
-      <p>
-        I built a multi-step registration flow with server-side validation, honeypot spam protection, rate limiting,
-        and case-insensitive duplicate detection. It supports a full lifecycle — new registration, admin review,
-        approval, profile updates, reactivation — and nothing a volunteer edits goes live unreviewed. Profile changes
-        are staged in a <code>pending_update</code> JSONB column until an admin approves them.
-      </p>
-
-      <h2>Admin dashboard</h2>
-      <p>
-        A secure admin interface sits behind a signed HMAC session cookie — no third-party auth vendor in the loop.
-        It gives staff a full volunteer management queue (approve, archive, restore, delete), diff visibility on
-        pending profile edits, blog-submission moderation with an editor allowlist, and site settings management, all
-        behind one authentication layer.
-      </p>
-
-      <h2>The portrait standardization studio</h2>
-      <p>
-        This is the piece I'm proudest of. Every volunteer headshot now gets automatically scaled to a consistent
-        head size with eyes pinned to a fixed vertical position on a branded canvas — entirely in the browser, at zero
-        per-image cost. It uses <code>@imgly/background-removal</code> (WebAssembly) to strip backgrounds client-side
-        and a self-hosted MediaPipe BlazeFace model (229KB) for face detection. The expensive AI step runs once per
-        photo and caches the cutout; the Head Size and Eye Line sliders then recompose the canvas instantly on every
-        tick, redrawing from the cached cutout instead of rerunning detection. Admins can auto-standardize in bulk,
-        manually crop against an eye-line alignment guide, convert HEIC files through a server fallback, or replace
-        just the background at native resolution — with defaults saved per admin.
-      </p>
-      <p>
-        The org had been eating into a paid image API (remove.bg) with 49 of 50 free calls sitting unused in
-        production. Moving the whole pipeline to free, unlimited in-browser WebAssembly eliminated that cost
-        entirely — while producing a more consistent result than the paid API had.
-      </p>
-      <p>
-        The result is live right now — the
-        <a href="https://inthebegin.org/volunteers" target="_blank" rel="noopener" style="color: var(--accent-deep);">volunteer page</a>
-        on their site is the actual output of this pipeline, not a mockup.
-      </p>
-
-      <h2>Blog submissions</h2>
-      <p>
-        Members submit posts through a public form; submissions land in a moderation queue. Editors — allowlisted by
-        email and PIN — publish approved posts directly. Archived posts are restorable; deleted posts are permanent.
-      </p>
-
-      <h2>Engineering decisions worth mentioning</h2>
-      <p>
-        Every mutation runs as a server action behind an HMAC-signed session cookie, verified server-side on each
-        privileged call rather than trusted from the browser — the admin surface is reachable by direct POST, so
-        the cookie check is what actually protects it, not the login screen.
-      </p>
-      <p>
-        Portraits are normalized in the client before upload and written to Cloudflare R2, so images are served from
-        object storage the client owns outright rather than a third-party image host that can change terms or
-        pricing. Roster, editorial, and settings data live in a MongoDB cluster.
-      </p>
-      <p>
-        A publishing freeze lets the team stage roster changes against the database while the public page stays
-        pinned to the last approved snapshot — edits are never lost, they simply do not go live until the freeze
-        is lifted.
-      </p>
-
-      <h2>Impact</h2>
-      <p>
-        A fragmented manual process became a structured digital workflow for intake, profile management, and content
-        publishing — and every volunteer portrait now carries a consistent visual identity, with no ongoing cost and
-        no manual editing effort.
-      </p>
-    </div>
-
-    <div class="mt-16 flex items-center gap-5">
-      <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
-      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
-    </div>
+    <h2>Impact</h2>
+    <p>
+      A fragmented manual process became a structured workflow for intake, roster management, and
+      publishing — one that the organization's volunteers run entirely themselves. No ongoing cost, no
+      manual image editing, and no dependency on the developer who built it.
+    </p>
   </div>
-</Base>
+</CaseStudy>
