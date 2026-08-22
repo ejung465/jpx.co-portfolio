@@ -6,14 +6,17 @@ import Base from "@/layouts/Base.astro";
   title="Contact — JPX Web Development Co."
   description="Get in touch about a full-stack web development project."
 >
-  <div class="max-w-[640px] mx-auto px-8 pt-16 pb-24">
-    <span class="eyebrow mb-4">Get in touch</span>
-    <h1 class="text-[36px] md:text-[46px] mt-4 mb-4">Let's talk about your project.</h1>
-    <p class="text-[17px] mb-10" style="color: var(--ink-soft);">
+  <div class="max-w-[640px] mx-auto px-8 pt-24 pb-28 md:pt-32">
+    <p class="eyebrow">Get in touch</p>
+    <h1 class="text-[40px] md:text-[56px] leading-[1.06] mt-8 max-w-[14ch]">
+      Let's talk about <em class="em-accent">your project.</em>
+    </h1>
+    <div class="rule mt-9"></div>
+    <p class="text-[16px] mt-9 mb-12 max-w-[48ch] leading-relaxed" style="color: var(--ink-soft);">
       Tell me what you're building. I read every message myself and reply within a day or two.
     </p>
 
-    <form id="contact-form" class="project-card glass flex flex-col gap-5">
+    <form id="contact-form" class="project-card glass flex flex-col gap-6" style="padding: 28px;">
       <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
       <div class="field">
@@ -53,9 +56,9 @@ import Base from "@/layouts/Base.astro";
 
     <p class="text-center mt-10 text-[14.5px]" style="color: var(--ink-soft);">
       Prefer to talk it through first? Email
-      <a href="mailto:info@jpxco.dev" style="color: var(--accent-deep);">info@jpxco.dev</a>
+      <a href="mailto:info@jpxco.dev" style="color: var(--accent);">info@jpxco.dev</a>
       or call
-      <a href="tel:+12247249020" style="color: var(--accent-deep);">(224) 724-9020</a>.
+      <a href="tel:+12247249020" style="color: var(--accent);">(224) 724-9020</a>.
     </p>
   </div>
 </Base>
@@ -80,7 +83,7 @@ import Base from "@/layouts/Base.astro";
       if (result.ok) {
         form.reset();
         status.textContent = "Thanks — I'll get back to you within a day or two.";
-        status.style.color = "var(--accent-deep)";
+        status.style.color = "var(--accent)";
         submitBtn.textContent = "Sent";
       } else {
         status.textContent = result.error ?? "Something went wrong. Try again shortly.";

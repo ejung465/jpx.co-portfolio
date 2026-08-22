@@ -6,20 +6,22 @@ import Base from "@/layouts/Base.astro";
   title="In The Beginning — case study — JPX Web Development Co."
   description="Full-stack volunteer registration, admin, and portrait-standardization platform built for In The Beginning, a student-led nonprofit supporting refugee students."
 >
-  <div class="max-w-[760px] mx-auto px-8 pt-16 pb-24">
+  <div class="max-w-[760px] mx-auto px-8 pt-24 pb-28 md:pt-32">
     <a href="/#work" class="link-ghost text-[14px] mb-8">
       <span class="arr" style="transform: rotate(180deg);">→</span> Back to work
     </a>
 
     <span class="tag">published</span>
-    <h1 class="text-[36px] md:text-[46px] mt-5 mb-3">In The Beginning</h1>
+    <h1 class="text-[42px] md:text-[58px] leading-[1.05] mt-6 mb-4">In The Beginning</h1>
     <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
       Complete digital infrastructure for a nonprofit — volunteer registration, an internal operations hub, and an
       in-browser tool that fixed a problem no one else was solving.
     </p>
 
+    <div class="rule mb-9"></div>
+
     <div class="flex flex-wrap gap-2 mb-12">
-      {["Next.js 16", "TypeScript", "Supabase / Postgres", "Tailwind CSS", "Vercel"].map((t) => (
+      {["Next.js 16", "TypeScript", "MongoDB", "Cloudflare R2", "Tailwind CSS", "Vercel"].map((t) => (
         <span class="tag">{t}</span>
       ))}
       <a href="https://inthebegin.org" target="_blank" rel="noopener" class="tag" style="text-decoration: none;">
@@ -119,16 +121,19 @@ import Base from "@/layouts/Base.astro";
 
       <h2>Engineering decisions worth mentioning</h2>
       <p>
-        Server-side HEIC-to-WebP conversion via <code>heic-convert</code> and <code>sharp</code>, with a 10MB body
-        limit on server actions — processed images go to Supabase Storage while the originals are preserved
-        separately for non-destructive re-editing. Postgres runs with Row Level Security; the service role key never
-        leaves the server, and the anon key is strictly read-only on the public frontend. A Vercel cron job pings
-        <code>/api/keep-alive</code> on a schedule to stop the free-tier database from pausing.
+        Every mutation runs as a server action behind an HMAC-signed session cookie, verified server-side on each
+        privileged call rather than trusted from the browser — the admin surface is reachable by direct POST, so
+        the cookie check is what actually protects it, not the login screen.
       </p>
       <p>
-        One production bug took real digging: volunteer profile submissions were silently failing because writes to
-        a column that didn't exist — <code>updated_at</code> — were failing quietly. I diagnosed it by querying the
-        live schema directly through the Supabase REST API rather than guessing from the code.
+        Portraits are normalized in the client before upload and written to Cloudflare R2, so images are served from
+        object storage the client owns outright rather than a third-party image host that can change terms or
+        pricing. Roster, editorial, and settings data live in a MongoDB cluster.
+      </p>
+      <p>
+        A publishing freeze lets the team stage roster changes against the database while the public page stays
+        pinned to the last approved snapshot — edits are never lost, they simply do not go live until the freeze
+        is lifted.
       </p>
 
       <h2>Impact</h2>

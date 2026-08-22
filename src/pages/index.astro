@@ -2,6 +2,21 @@
 import Base from "@/layouts/Base.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
 import { projects } from "@/data/projects";
+
+const approach = [
+  {
+    title: "One point of contact",
+    body: "No account managers, no handoffs. You talk to the person writing the code, from the first call to the last deploy.",
+  },
+  {
+    title: "Built to last",
+    body: "No page builders held together with plugins. Real code, version controlled, on infrastructure you actually own.",
+  },
+  {
+    title: "Honest scope",
+    body: "I'll tell you what you don't need. A smaller site that ships beats a larger one that stalls in review.",
+  },
+];
 ---
 
 <Base
@@ -9,103 +24,127 @@ import { projects } from "@/data/projects";
   description="Full-stack web development for small businesses and nonprofits. Built properly, by one person who picks up the phone."
 >
   <div class="max-w-[1080px] mx-auto px-8">
-    <section class="max-w-[720px] pt-16 pb-12 md:pt-24 md:pb-16">
+    <!-- ── Masthead ─────────────────────────────────────────────── -->
+    <section class="pt-24 pb-24 md:pt-36 md:pb-32">
       <span class="pill glass-strong">
         <span class="pill-dot"></span> Available — taking on new projects
       </span>
-      <h1 class="text-[34px] md:text-[50px] leading-[1.08] mt-5 mb-5">
+
+      <h1 class="text-[42px] md:text-[68px] leading-[1.04] mt-8 max-w-[15ch]">
         Full-stack web development for small businesses <em class="em-accent">and nonprofits.</em>
       </h1>
-      <p class="text-[18px] max-w-[46ch] mb-8" style="color: var(--ink-soft);">
-        Built properly, by one person who picks up the phone.
+
+      <div class="rule mt-10"></div>
+
+      <p class="text-[16px] md:text-[17px] max-w-[46ch] mt-9 leading-relaxed" style="color: var(--ink-soft);">
+        Built properly, by one person who picks up the phone — design, code, and the unglamorous
+        infrastructure in between.
       </p>
-      <div class="flex items-center gap-5 flex-wrap">
-        <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+
+      <div class="flex items-center gap-7 flex-wrap mt-11">
+        <a href="/contact" class="btn-neu">Book a 20-min call</a>
         <a class="link-ghost" href="#work">See the work <span class="arr">→</span></a>
       </div>
     </section>
 
-    <section id="work" class="py-10 md:py-14 scroll-mt-24">
-      <h2 class="eyebrow mb-4">Selected work</h2>
-      <p class="text-[17px] max-w-[52ch] mb-10" style="color: var(--ink-soft);">
-        A few of the projects I've built end to end — design, code, and the unglamorous infrastructure in between.
+    <!-- ── Selected work ────────────────────────────────────────── -->
+    <section id="work" class="scroll-mt-28 py-20 md:py-24" style="border-top: 1px solid var(--glass-line);">
+      <div class="grid gap-12 md:grid-cols-[10rem_1fr]">
+        <p class="eyebrow pt-1">Selected work</p>
+
+        <div>
+          <p class="text-[16px] max-w-[52ch] mb-12 leading-relaxed" style="color: var(--ink-soft);">
+            A few of the projects I've built end to end — the interface, the data layer, and the
+            administrative tooling the client actually runs day to day.
+          </p>
+
+          <div class="grid sm:grid-cols-2 gap-5">
+            {projects.map((project) => (
+              <ProjectCard project={project}>
+                {project.slug === "in-the-beginning" ? (
+                  <div class="studio">
+                    <div class="canvas">
+                      <div class="guide-v"></div>
+                      <div class="guide-h"></div>
+                      <span class="guide-tag">eye line</span>
+                      <div class="head"></div>
+                      <div class="shoulders"></div>
+                    </div>
+                    <div class="controls">
+                      <div class="control">
+                        <label>Head size <span>62%</span></label>
+                        <div class="track"><span class="fill" style="width:62%"></span><span class="knob" style="left:62%"></span></div>
+                      </div>
+                      <div class="control">
+                        <label>Eye line <span>34%</span></label>
+                        <div class="track"><span class="fill" style="width:34%"></span><span class="knob" style="left:34%"></span></div>
+                      </div>
+                    </div>
+                  </div>
+                ) : project.frame === "phone" ? (
+                  <div class="lineshot" style="padding: 14px 12px;">
+                    <div class="ln a" style="width:70%"></div>
+                    <div class="ln b"></div>
+                    <div class="ln c"></div>
+                    <div class="ln b" style="width:60%"></div>
+                  </div>
+                ) : (
+                  <div class="lineshot">
+                    <div class="ln a"></div>
+                    <div class="ln b"></div>
+                    <div class="ln c"></div>
+                    <div class="chip-row"><div class="chip fill"></div><div class="chip"></div><div class="chip"></div></div>
+                  </div>
+                )}
+              </ProjectCard>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Approach ─────────────────────────────────────────────── -->
+    <section id="approach" class="scroll-mt-28 py-20 md:py-24" style="border-top: 1px solid var(--glass-line);">
+      <div class="grid gap-12 md:grid-cols-[10rem_1fr]">
+        <p class="eyebrow pt-1">How I work</p>
+
+        <div class="grid gap-px overflow-hidden rounded-[10px]" style="background: var(--glass-line);">
+          {approach.map((item, i) => (
+            <div class="approach-row px-7 py-8 transition-colors" style="background: var(--base);">
+              <div class="flex items-baseline gap-6">
+                <span class="font-serif text-[19px] flex-none" style="color: rgba(200,169,106,.55);">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 class="text-[24px] md:text-[26px]">{item.title}</h3>
+                  <p class="text-[15px] mt-3 max-w-[58ch] leading-relaxed" style="color: var(--ink-soft);">
+                    {item.body}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Close ────────────────────────────────────────────────── -->
+    <section class="py-24 md:py-32 text-center" style="border-top: 1px solid var(--glass-line);">
+      <h2 class="text-[38px] md:text-[52px] leading-[1.08] max-w-[18ch] mx-auto">
+        Have a project <em class="em-accent">in mind?</em>
+      </h2>
+      <p class="text-[16px] max-w-[44ch] mx-auto mt-7 leading-relaxed" style="color: var(--ink-soft);">
+        Tell me what you're trying to build. I'll tell you honestly whether I'm the right fit.
       </p>
-
-      <div class="grid sm:grid-cols-2 gap-6">
-        {projects.map((project) => (
-          <ProjectCard project={project}>
-            {project.slug === "in-the-beginning" ? (
-              <div class="studio">
-                <div class="canvas">
-                  <div class="guide-v"></div>
-                  <div class="guide-h"></div>
-                  <span class="guide-tag">eye line</span>
-                  <div class="head"></div>
-                  <div class="shoulders"></div>
-                </div>
-                <div class="controls">
-                  <div class="control">
-                    <label>Head size <span>62%</span></label>
-                    <div class="track"><span class="fill" style="width:62%"></span><span class="knob" style="left:62%"></span></div>
-                  </div>
-                  <div class="control">
-                    <label>Eye line <span>34%</span></label>
-                    <div class="track"><span class="fill" style="width:34%"></span><span class="knob" style="left:34%"></span></div>
-                  </div>
-                </div>
-              </div>
-            ) : project.frame === "phone" ? (
-              <div class="lineshot" style="padding: 14px 12px;">
-                <div class="ln a" style="width:70%"></div>
-                <div class="ln b"></div>
-                <div class="ln c"></div>
-                <div class="ln b" style="width:60%"></div>
-              </div>
-            ) : (
-              <div class="lineshot">
-                <div class="ln a"></div>
-                <div class="ln b"></div>
-                <div class="ln c"></div>
-                <div class="chip-row"><div class="chip fill"></div><div class="chip"></div><div class="chip"></div></div>
-              </div>
-            )}
-          </ProjectCard>
-        ))}
-      </div>
-    </section>
-
-    <section id="approach" class="py-16 md:py-20 scroll-mt-24">
-      <h2 class="eyebrow mb-4">How I work</h2>
-      <div class="grid sm:grid-cols-3 gap-6 mt-8">
-        <div class="project-card glass">
-          <p class="font-semibold text-[16px] mb-2">One point of contact</p>
-          <p class="text-[14.5px]" style="color: var(--ink-soft);">
-            No account managers, no handoffs. You talk to the person writing the code, from the first call to the last deploy.
-          </p>
-        </div>
-        <div class="project-card glass">
-          <p class="font-semibold text-[16px] mb-2">Built to last</p>
-          <p class="text-[14.5px]" style="color: var(--ink-soft);">
-            No page builders held together with plugins. Real code, version controlled, that you actually own.
-          </p>
-        </div>
-        <div class="project-card glass">
-          <p class="font-semibold text-[16px] mb-2">Honest scope</p>
-          <p class="text-[14.5px]" style="color: var(--ink-soft);">
-            I'll tell you what you don't need. A smaller site that ships beats a big one that stalls.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="py-16 md:py-24">
-      <div class="project-card glass text-center px-8 py-14 md:py-16">
-        <h2 class="text-[30px] md:text-[38px] mb-4">Have a project in mind?</h2>
-        <p class="text-[16px] max-w-[42ch] mx-auto mb-8" style="color: var(--ink-soft);">
-          Tell me what you're trying to build. I'll tell you honestly whether I'm the right fit.
-        </p>
-        <a href="/contact" class="btn-neu inline-block">Book a 20-min call</a>
+      <div class="mt-11">
+        <a href="/contact" class="btn-neu">Book a 20-min call</a>
       </div>
     </section>
   </div>
 </Base>
+
+<style>
+  .approach-row:hover {
+    background: #0e1424 !important;
+  }
+</style>

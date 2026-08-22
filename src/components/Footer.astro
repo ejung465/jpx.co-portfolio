@@ -2,20 +2,32 @@
 const year = 2026;
 ---
 
-<footer class="mt-24">
-  <div class="max-w-[1080px] mx-auto px-8 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-    style="border-top: 1px solid var(--glass-line);">
+<footer class="mt-28">
+  <div
+    class="max-w-[1080px] mx-auto px-8 py-12 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-8"
+    style="border-top: 1px solid var(--glass-line);"
+  >
     <div>
-      <p class="font-semibold text-[15px]">JPX Web Development Co.</p>
-      <p class="text-[13px] mt-0.5" style="color: var(--ink-soft);">Full-stack web development, built by hand.</p>
+      <p class="font-serif text-[26px] leading-none">JPX</p>
+      <p class="font-mono text-[9.5px] uppercase mt-3" style="letter-spacing: 0.3em; color: var(--ink-faint);">
+        Web Development Co.
+      </p>
     </div>
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-[13.5px]" style="color: var(--ink-soft);">
-      <a href="mailto:info@jpxco.dev" class="hover:text-[var(--ink)] transition-colors">info@jpxco.dev</a>
-      <a href="tel:+12247249020" class="hover:text-[var(--ink)] transition-colors">(224) 724-9020</a>
-      <a href="/contact" class="hover:text-[var(--ink)] transition-colors">Book a call</a>
+
+    <div class="flex flex-wrap items-center gap-x-7 gap-y-2 font-mono text-[10px] uppercase" style="letter-spacing: 0.18em; color: var(--ink-faint);">
+      <a href="mailto:info@jpxco.dev" class="foot-link transition-colors">info@jpxco.dev</a>
+      <a href="tel:+12247249020" class="foot-link transition-colors">(224) 724-9020</a>
+      <a href="/contact" class="foot-link transition-colors">Book a call</a>
     </div>
   </div>
-  <p class="text-center text-[11.5px] pb-8" style="font-family: 'JetBrains Mono', monospace; color: var(--ink-faint);">
-    © {year} JPX Web Development Co. — designed & built from scratch
+
+  <p class="text-center font-mono text-[9.5px] uppercase pb-10" style="letter-spacing: 0.22em; color: var(--ink-faint);">
+    © {year} JPX Web Development Co. · All Rights Reserved
   </p>
 </footer>
+
+<style>
+  .foot-link:hover {
+    color: var(--accent);
+  }
+</style>
