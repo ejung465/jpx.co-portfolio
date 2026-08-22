@@ -1,0 +1,20 @@
+---
+import CaseStudy from "@/layouts/CaseStudy.astro";
+import Notes from "@/components/case-notes/InTheBeginning.astro";
+import { projects } from "@/data/projects";
+
+const project = projects.find((p) => p.slug === "in-the-beginning")!;
+
+/**
+ * Client-facing twin of /work/in-the-beginning.
+ *
+ * Same record, same source of truth — the only difference is where the
+ * return link points. Link to this route from inthebegin.org so visitors
+ * arriving from the client site can get back to it; the portfolio route
+ * keeps its own "Back to work" and never sends people off-site.
+ */
+---
+
+<CaseStudy project={project} backLink={{ href: "https://inthebegin.org", label: "In The Beginning" }}>
+  <Notes />
+</CaseStudy>

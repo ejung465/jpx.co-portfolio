@@ -1,52 +1,12 @@
 ---
 import CaseStudy from "@/layouts/CaseStudy.astro";
+import Notes from "@/components/case-notes/InTheBeginning.astro";
 import { projects } from "@/data/projects";
 
 const project = projects.find((p) => p.slug === "in-the-beginning")!;
+// Portfolio route: returns to the work index. No link off to the client site.
 ---
 
 <CaseStudy project={project}>
-  <div class="prose-case mt-20">
-    <h2>The organization</h2>
-    <p>
-      In The Beginning is a student-led 501(c)(3) in the Chicago area, tutoring refugee and displaced
-      students in English, science, and math, and offering music and string-instrument instruction
-      alongside mentoring. It is run by high schoolers — the founder and president was still in high school
-      through this engagement — which is exactly why the gap between what the organization needed and what
-      it could maintain was so wide.
-    </p>
-
-    <h2>The problem</h2>
-    <p>
-      The volunteer program ran the way most student-led nonprofits run: spreadsheets, email threads, and a
-      public roster assembled by hand. There was no single system for intake, review, or publishing, and
-      nobody on staff whose job was to run one. Anything that required a developer to operate would be
-      abandoned the moment the person who built it graduated.
-    </p>
-
-    <h2>What it does</h2>
-    <p>
-      Volunteers apply through a multi-step public form with server-side validation, rate limiting, and
-      duplicate detection. Applications enter a review queue; nothing reaches the public roster unreviewed.
-      Profile edits from existing volunteers are staged rather than applied, so an administrator sees a
-      clear diff before anything changes in public. Members submit written pieces through the same pattern,
-      and an allowlisted set of editors publishes them.
-    </p>
-    <p>
-      Portraits are the part I'm most pleased with. Headshots arrive from a dozen phones at a dozen
-      distances, and a roster where every face sits at a different scale looks careless no matter how good
-      the underlying design is. Every image is normalized in the browser before upload — scaled to a
-      consistent crop with the subject placed on a fixed line — so the roster reads as one set. It runs
-      client-side at no per-image cost and with no third-party image service in the path. The
-      <a href="https://inthebegin.org/volunteers" target="_blank" rel="noopener noreferrer">volunteer roster</a>
-      on their site is the live output of that pipeline, not a mockup.
-    </p>
-
-    <h2>Impact</h2>
-    <p>
-      A fragmented manual process became a structured workflow for intake, roster management, and
-      publishing — one that the organization's volunteers run entirely themselves. No ongoing cost, no
-      manual image editing, and no dependency on the developer who built it.
-    </p>
-  </div>
+  <Notes />
 </CaseStudy>
