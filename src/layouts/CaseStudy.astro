@@ -1,0 +1,142 @@
+---
+import Base from "@/layouts/Base.astro";
+import type { Project } from "@/data/projects";
+
+interface Props {
+  project: Project;
+  /**
+   * Where the top-left return link points.
+   * Default returns to the work index on this site. Pass a client-site
+   * destination (or `null` to hide it entirely) when this same record is
+   * published from somewhere other than the portfolio.
+   */
+  backLink?: { href: string; label: string } | null;
+}
+
+const { project, backLink } = Astro.props;
+const back = backLink === undefined ? { href: "/#work", label: "Back to work" } : backLink;
+const hasColophon = project.colophon.length > 0;
+const hasStack = project.stack.length > 0;
+---
+
+<Base title={`${project.name} — JPX Website Development Co.`} description={project.metaDescription}>
+  <div class="shell-narrow pt-16 pb-8">
+    {back && (
+      <a href={back.href} class="link-ghost" style="font-size: var(--t-sm);">
+        <span aria-hidden="true">←</span> {back.label}
+      </a>
+    )}
+  </div>
+
+  <!-- ── The engagement ───────────────────────────────────── -->
+  <div class="shell-narrow">
+    <p class="eyebrow mt-8">The engagement</p>
+
+    <h1 class="text-[38px] md:text-[52px] mt-5">{project.name}</h1>
+
+    <p class="lede mt-6 max-w-[54ch]">{project.engagement.brief}</p>
+
+    <dl class="spec">
+      <div>
+        <dt>Scope</dt>
+        <dd>{project.engagement.scope}</dd>
+      </div>
+      <div>
+        <dt>Practice</dt>
+        <dd>{project.engagement.practice}</dd>
+      </div>
+      <div>
+        <dt>Delivered</dt>
+        <dd>{project.engagement.delivered}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd>{project.status}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- ── Live preview ─────────────────────────────────────── -->
+  <div class="shell-narrow mt-16">
+    <a
+      href={project.external ?? project.href}
+      class="project-shot"
+      target={project.external ? "_blank" : undefined}
+      rel={project.external ? "noopener noreferrer" : undefined}
+      aria-label={project.external ? `Open ${project.displayUrl} in a new tab` : project.name}
+    >
+      <div class="browser-chrome__bar">
+        <i></i><i></i><i></i>
+        <span>{project.displayUrl}</span>
+        {project.external && <span class="ext" aria-hidden="true">↗</span>}
+      </div>
+
+      {project.frame === "phone" ? (
+        <div class="phone-stage" style="padding: 56px 16px;">
+          <div class="phone-frame" style="width: 176px;">
+            <img src={project.image} alt={project.imageAlt} decoding="async" />
+          </div>
+        </div>
+      ) : (
+        <div class="card-shot">
+          <img src={project.image} alt={project.imageAlt} decoding="async" />
+        </div>
+      )}
+    </a>
+
+    {project.external && (
+      <p
+        class="mt-4 font-mono uppercase"
+        style="font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
+      >
+        Preview captured from the live site — select it to open {project.displayUrl}
+      </p>
+    )}
+  </div>
+
+  <!-- ── Stack ────────────────────────────────────────────── -->
+  {hasStack && (
+    <div class="shell-narrow mt-16">
+      <p class="eyebrow eyebrow-muted">Built with</p>
+      <div class="flex flex-wrap gap-2 mt-5">
+        {project.stack.map((t) => <span class="tag">{t}</span>)}
+        {project.external && (
+          <a href={project.external} target="_blank" rel="noopener noreferrer" class="tag">
+            {project.displayUrl} <span aria-hidden="true">↗</span>
+          </a>
+        )}
+      </div>
+    </div>
+  )}
+
+  <!-- ── Colophon ─────────────────────────────────────────── -->
+  {hasColophon && (
+    <div class="shell-narrow mt-20">
+      <p class="eyebrow">Colophon</p>
+      <div class="numbered mt-6">
+        {project.colophon.map((entry, i) => (
+          <div class="numbered__row">
+            <span class="numbered__n">{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h3>{entry.title}</h3>
+              <p>{entry.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- ── Optional long-form notes ─────────────────────────── -->
+  <div class="shell-narrow">
+    <slot />
+  </div>
+
+  <!-- ── Close ────────────────────────────────────────────── -->
+  <div class="shell-narrow mt-20 pt-12" style="border-top: 1px solid var(--glass-line);">
+    <div class="flex flex-wrap items-center gap-8">
+      <a href="/contact" class="btn">Book a 20-min call</a>
+      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
+    </div>
+  </div>
+</Base>

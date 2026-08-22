@@ -42,7 +42,7 @@ export const POST: APIRoute = async ({ request }) => {
     await resend.emails.send({
       // Resend's shared sandbox sender — works with no domain verification.
       // Once jpxco.dev is verified in Resend, switch this to e.g. contact@jpxco.dev.
-      from: "JPX Web Development Co. <onboarding@resend.dev>",
+      from: "JPX Website Development Co. <onboarding@resend.dev>",
       to: TO_EMAIL,
       replyTo: email,
       subject: `New inquiry from ${name}${projectType ? ` — ${projectType}` : ""}`,

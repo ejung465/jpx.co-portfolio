@@ -4,65 +4,46 @@ import type { Project } from "@/data/projects";
 interface Props {
   project: Project;
 }
-
 const { project } = Astro.props;
 
-const tagLabel = {
-  published: "published",
-  "coming-soon": "coming soon",
-  "in-progress": "in progress",
-}[project.tagKind];
+// The preview opens the live site; the title opens the case study.
+// Two sibling links rather than nested anchors (which would be invalid).
+const previewHref = project.external ?? project.href;
+const isExternal = Boolean(project.external);
 ---
 
-<a href={project.href} class="project-card glass block hover:-translate-y-0.5 transition-transform" style="text-decoration: none; color: inherit;">
-  {project.frame === "browser" ? (
-    <div class="browser-chrome">
-      <div class="browser-chrome__bar">
-        <i></i><i></i><i></i>
-        <span>{project.browserUrl}</span>
-      </div>
-      {project.image ? (
-        <div class="card-shot">
-          <img src={project.image} alt={project.imageAlt ?? project.name} loading="lazy" style={`object-fit: ${project.imageFit ?? "cover"};`} />
-        </div>
-      ) : (
-        <slot />
-      )}
+<article class="project-card">
+  <a
+    href={previewHref}
+    class="project-shot"
+    target={isExternal ? "_blank" : undefined}
+    rel={isExternal ? "noopener noreferrer" : undefined}
+    aria-label={isExternal ? `Open ${project.name} in a new tab` : `${project.name} case study`}
+  >
+    <div class="browser-chrome__bar">
+      <i></i><i></i><i></i>
+      <span>{project.displayUrl}</span>
+      {isExternal && <span class="ext" aria-hidden="true">↗</span>}
     </div>
-  ) : (
-    <div class="browser-chrome flex justify-center py-5">
-      <div class="w-[92px] rounded-[20px] overflow-hidden" style="border: 6px solid var(--ink); aspect-ratio: 9/18.5;">
-        {project.image ? (
-          <div class="card-shot card-shot--logo">
-            <img src={project.image} alt={project.imageAlt ?? project.name} loading="lazy" style={`object-fit: ${project.imageFit ?? "cover"};`} />
-          </div>
-        ) : (
-          <slot />
-        )}
-      </div>
-    </div>
-  )}
 
-  <div class="project-meta">
+    {project.frame === "phone" ? (
+      <div class="phone-stage">
+        <div class="phone-frame">
+          <img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
+        </div>
+      </div>
+    ) : (
+      <div class="card-shot">
+        <img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
+      </div>
+    )}
+  </a>
+
+  <a href={project.href} class="project-meta">
     <div>
       <div class="t">{project.name}</div>
       <div class="s">{project.tagline}</div>
     </div>
-    <span class={`tag ${project.tagKind !== "published" ? "tag-warm" : ""}`}>{tagLabel}</span>
-  </div>
-
-  {project.statPrimary.label && (
-    <div class="stat-row">
-      <div>
-        <b>{project.statPrimary.value}</b>
-        <small>{project.statPrimary.label}</small>
-      </div>
-      {project.statSecondary.label && (
-        <div>
-          <b>{project.statSecondary.value}</b>
-          <small>{project.statSecondary.label}</small>
-        </div>
-      )}
-    </div>
-  )}
-</a>
+    <span class={project.status === "In service" ? "tag" : "tag tag-muted"}>{project.status}</span>
+  </a>
+</article>
