@@ -38,20 +38,37 @@ export const POST: APIRoute = async ({ request }) => {
 
   const resend = new Resend(apiKey);
 
+  // resend.emails.send() returns { data, error } — it does NOT throw on an
+  // API-level rejection (e.g. the sandbox sender's recipient restriction
+  // before jpxco.dev is verified). Both paths must be checked, or a
+  // rejected send gets reported to the client — and logged here — as a
+  // silent success.
+  let result;
   try {
-    await resend.emails.send({
-      // Resend's shared sandbox sender — works with no domain verification.
-      // Once jpxco.dev is verified in Resend, switch this to e.g. contact@jpxco.dev.
+    result = await resend.emails.send({
+      // Resend's shared sandbox sender — works with no domain verification,
+      // but while unverified it can only deliver to the address on the
+      // Resend account itself. Once jpxco.dev is verified in Resend, switch
+      // this to e.g. contact@jpxco.dev so it can reach any recipient.
       from: "JPX Website Development Co. <onboarding@resend.dev>",
       to: TO_EMAIL,
       replyTo: email,
       subject: `New inquiry from ${name}${projectType ? ` — ${projectType}` : ""}`,
       text: `From: ${name} <${email}>\nPhone: ${phone || "not provided"}\nProject type: ${projectType || "n/a"}\n\n${message}`,
     });
-  } catch {
+  } catch (err) {
+    console.error("contact form: resend threw", err);
     return new Response(JSON.stringify({ ok: false, error: "Something went wrong sending that. Try again shortly." }), {
       status: 502,
     });
+  }
+
+  if (result.error) {
+    console.error("contact form: resend rejected the send", result.error);
+    return new Response(
+      JSON.stringify({ ok: false, error: "Something went wrong sending that. Try again shortly." }),
+      { status: 502 },
+    );
   }
 
   return new Response(JSON.stringify({ ok: true }), { status: 200 });
