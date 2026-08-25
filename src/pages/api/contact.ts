@@ -46,11 +46,10 @@ export const POST: APIRoute = async ({ request }) => {
   let result;
   try {
     result = await resend.emails.send({
-      // Resend's shared sandbox sender — works with no domain verification,
-      // but while unverified it can only deliver to the address on the
-      // Resend account itself. Once jpxco.dev is verified in Resend, switch
-      // this to e.g. contact@jpxco.dev so it can reach any recipient.
-      from: "JPX Website Development Co. <onboarding@resend.dev>",
+      // jpxco.dev is verified in Resend, so sending from it reaches any
+      // recipient (the shared onboarding@resend.dev sender only delivers
+      // back to the Resend account's own address).
+      from: "JPX Website Development Co. <contact@jpxco.dev>",
       to: TO_EMAIL,
       replyTo: email,
       subject: `New inquiry from ${name}${projectType ? ` — ${projectType}` : ""}`,
