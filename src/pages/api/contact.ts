@@ -3,7 +3,7 @@ import { Resend } from "resend";
 
 export const prerender = false;
 
-const TO_EMAIL = "ethanjung2028@gmail.com";
+const TO_EMAIL = "contact@jpxco.dev";
 const MAX_MESSAGE_LENGTH = 4000;
 
 export const POST: APIRoute = async ({ request }) => {
