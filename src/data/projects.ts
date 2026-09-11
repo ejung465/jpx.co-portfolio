@@ -4,7 +4,9 @@ export type Project = {
   slug: string;
   name: string;
   tagline: string;
-  status: "In service" | "In development";
+  status: "In service" | "In development" | "Offline";
+  /** shown on the case study when a site is no longer reachable */
+  statusNote?: string;
   /** how the preview is framed on the card */
   frame: "browser" | "phone";
   /** full-width row in the work grid */
@@ -107,10 +109,11 @@ export const projects: Project[] = [
     slug: "in-the-beginning",
     name: "In The Beginning",
     tagline: "Nonprofit platform & operations tooling",
-    status: "In service",
+    status: "Offline",
+    statusNote:
+      "The site was taken offline at the organization's request following internal changes on their side. The build and its administrative tooling are unaffected; the capture below is the site as delivered.",
     frame: "browser",
     displayUrl: "inthebegin.org",
-    external: "https://inthebegin.org",
     image: "/images/shots/in-the-beginning.jpg",
     imageAlt: "In The Beginning homepage",
     href: "/work/in-the-beginning",

@@ -16,6 +16,11 @@ interface Props {
 const { project, backLink } = Astro.props;
 const back = backLink === undefined ? { href: "/#work", label: "Back to work" } : backLink;
 const hasColophon = project.colophon.length > 0;
+const statusClass = {
+  "In service": "status status--live",
+  "In development": "status status--dev",
+  Offline: "status status--offline",
+}[project.status];
 const hasStack = project.stack.length > 0;
 ---
 
@@ -51,9 +56,18 @@ const hasStack = project.stack.length > 0;
       </div>
       <div>
         <dt>Status</dt>
-        <dd>{project.status}</dd>
+        <dd>
+          <span class={statusClass}>
+            <span class="status__dot" aria-hidden="true"></span>
+            {project.status}
+          </span>
+        </dd>
       </div>
     </dl>
+
+    {project.statusNote && (
+      <p class="status-note">{project.statusNote}</p>
+    )}
   </div>
 
   <!-- ── Live preview ─────────────────────────────────────── -->
