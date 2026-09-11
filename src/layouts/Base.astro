@@ -49,6 +49,7 @@ const ogImage = new URL("/images/og.jpg", Astro.site);
   <body>
     <div class="bg-blueprint" aria-hidden="true">
       <div class="bg-blueprint__grid"></div>
+      <div class="bg-cursor" id="bg-cursor"></div>
       <div class="bg-blueprint__glow"></div>
     </div>
 
@@ -57,5 +58,59 @@ const ogImage = new URL("/images/og.jpg", Astro.site);
       <slot />
     </main>
     <Footer />
+
+    <script>
+      // Pointer-reactive backdrop: the golden grid and glow trail the cursor.
+      // Eased rather than pinned 1:1 — the lag is what makes it read as material
+      // rather than as a cursor attachment. Parks the rAF loop once it settles so
+      // an idle tab isn't burning frames.
+      (() => {
+        const layer = document.getElementById("bg-cursor");
+        if (!layer) return;
+
+        const fine = window.matchMedia("(pointer: fine)");
+        const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
+        if (!fine.matches || calm.matches) return;
+
+        let targetX = window.innerWidth / 2;
+        let targetY = window.innerHeight / 2;
+        let x = targetX;
+        let y = targetY;
+        let frame = 0;
+        let lit = false;
+
+        const draw = () => {
+          x += (targetX - x) * 0.14;
+          y += (targetY - y) * 0.14;
+          layer.style.setProperty("--mx", x.toFixed(1) + "px");
+          layer.style.setProperty("--my", y.toFixed(1) + "px");
+
+          // settled — stop drawing until the pointer moves again
+          if (Math.abs(targetX - x) < 0.4 && Math.abs(targetY - y) < 0.4) {
+            frame = 0;
+            return;
+          }
+          frame = requestAnimationFrame(draw);
+        };
+
+        const onMove = (event) => {
+          targetX = event.clientX;
+          targetY = event.clientY;
+          if (!lit) {
+            lit = true;
+            x = targetX;
+            y = targetY;
+            layer.classList.add("is-lit");
+          }
+          if (!frame) frame = requestAnimationFrame(draw);
+        };
+
+        window.addEventListener("pointermove", onMove, { passive: true });
+        document.addEventListener("pointerleave", () => layer.classList.remove("is-lit"));
+        document.addEventListener("pointerenter", () => {
+          if (lit) layer.classList.add("is-lit");
+        });
+      })();
+    </script>
   </body>
 </html>

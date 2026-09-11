@@ -6,36 +6,45 @@ interface Props {
 }
 const { project } = Astro.props;
 
-// The preview opens the live site; the title opens the case study.
-// Two sibling links rather than nested anchors (which would be invalid).
+// The preview opens the live site where there is one; otherwise it falls
+// back to the case study. Two sibling links rather than nested anchors.
 const previewHref = project.external ?? project.href;
 const isExternal = Boolean(project.external);
+const isPhone = project.frame === "phone";
+
+const statusClass = {
+  "In service": "status status--live",
+  "In development": "status status--dev",
+  Offline: "status status--offline",
+}[project.status];
 ---
 
 <article class="project-card">
   <a
     href={previewHref}
-    class="project-shot"
+    class:list={["project-shot", isPhone && "project-shot--device"]}
     target={isExternal ? "_blank" : undefined}
     rel={isExternal ? "noopener noreferrer" : undefined}
     aria-label={isExternal ? `Open ${project.name} in a new tab` : `${project.name} case study`}
   >
-    <div class="browser-chrome__bar">
-      <i></i><i></i><i></i>
-      <span>{project.displayUrl}</span>
-      {isExternal && <span class="ext" aria-hidden="true">↗</span>}
-    </div>
-
-    {project.frame === "phone" ? (
-      <div class="phone-stage">
+    {isPhone ? (
+      /* A device, not a desktop window — no browser chrome to imply a screenshot of a screenshot. */
+      <div class="device-stage">
         <div class="phone-frame">
           <img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
         </div>
       </div>
     ) : (
-      <div class="card-shot">
-        <img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
-      </div>
+      <>
+        <div class="browser-chrome__bar">
+          <i></i><i></i><i></i>
+          <span>{project.displayUrl}</span>
+          {isExternal && <span class="ext" aria-hidden="true">↗</span>}
+        </div>
+        <div class="card-shot">
+          <img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
+        </div>
+      </>
     )}
   </a>
 
@@ -44,6 +53,9 @@ const isExternal = Boolean(project.external);
       <div class="t">{project.name}</div>
       <div class="s">{project.tagline}</div>
     </div>
-    <span class={project.status === "In service" ? "tag" : "tag tag-muted"}>{project.status}</span>
+    <span class={statusClass}>
+      <span class="status__dot" aria-hidden="true"></span>
+      {project.status}
+    </span>
   </a>
 </article>

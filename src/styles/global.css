@@ -25,6 +25,17 @@
     --accent-deep: #e0c88e;
     --accent-soft: rgba(200, 169, 106, 0.12);
 
+    /* — status: desaturated so they sit inside the palette rather than shout — */
+    --ok: #5fb98a;
+    --ok-soft: rgba(95, 185, 138, 0.12);
+    --ok-line: rgba(95, 185, 138, 0.28);
+    --warn: #d9a441;
+    --warn-soft: rgba(217, 164, 65, 0.12);
+    --warn-line: rgba(217, 164, 65, 0.3);
+    --danger: #d9635e;
+    --danger-soft: rgba(217, 99, 94, 0.12);
+    --danger-line: rgba(217, 99, 94, 0.3);
+
     --glass: rgba(255, 255, 255, 0.028);
     --glass-strong: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(245, 243, 239, 0.09);
@@ -95,6 +106,41 @@
     -webkit-mask-image: radial-gradient(130% 90% at 60% 0%, #000 20%, transparent 78%);
     mask-image: radial-gradient(130% 90% at 60% 0%, #000 20%, transparent 78%);
   }
+  /* Golden grid + glow that trails the pointer. Shares the base grid's box and
+     88px cell size, so the lit lines land exactly on the unlit ones. */
+  .bg-cursor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 700ms ease;
+    background-image: linear-gradient(rgba(200, 169, 106, 0.32) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200, 169, 106, 0.32) 1px, transparent 1px),
+      radial-gradient(circle 280px at var(--mx, 50%) var(--my, 50%), rgba(200, 169, 106, 0.1), transparent 70%);
+    background-size: 88px 88px, 88px 88px, 100% 100%;
+    -webkit-mask-image: radial-gradient(
+      circle 240px at var(--mx, 50%) var(--my, 50%),
+      #000 0%,
+      rgba(0, 0, 0, 0.5) 45%,
+      transparent 76%
+    );
+    mask-image: radial-gradient(
+      circle 240px at var(--mx, 50%) var(--my, 50%),
+      #000 0%,
+      rgba(0, 0, 0, 0.5) 45%,
+      transparent 76%
+    );
+  }
+  .bg-cursor.is-lit {
+    opacity: 1;
+  }
+  /* no pointer to follow, or the visitor asked for less motion */
+  @media (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .bg-cursor {
+      display: none;
+    }
+  }
+
   .bg-blueprint__glow {
     position: absolute;
     width: 900px;
@@ -187,6 +233,31 @@
     font-size: var(--t-xl);
   }
 
+  /* ── masthead: headline spans the measure, supporting text splits beneath it ── */
+  .masthead__title {
+    font-size: clamp(40px, 7vw, 68px);
+    line-height: 1.04;
+    max-width: 24ch;
+  }
+  .masthead__foot {
+    display: grid;
+    gap: 40px;
+    margin-top: 48px;
+  }
+  @media (min-width: 900px) {
+    .masthead__foot {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 64px;
+    }
+  }
+  .masthead__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+
   /* ── availability line: a quiet mono note, not a SaaS status chip ── */
   .availability {
     display: flex;
@@ -199,11 +270,36 @@
     color: var(--ink-faint);
   }
   .availability__dot {
+    position: relative;
     width: 5px;
     height: 5px;
     flex: none;
     border-radius: 50%;
     background: var(--accent);
+  }
+  .availability__dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: availability-pulse 2600ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  }
+  @keyframes availability-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    70%,
+    100% {
+      transform: scale(3.4);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .availability__dot::after {
+      animation: none;
+    }
   }
 
   /* ── controls ── */
@@ -332,17 +428,32 @@
     object-position: top center;
   }
 
-  /* Alloy: a phone on its own brand ground */
-  .phone-stage {
+  /* A phone presented as a device — no browser chrome, which would read as a
+     screenshot of a desktop screenshot of a phone. */
+  .project-shot--device {
+    border: none;
+    background: transparent;
+  }
+  .device-stage {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 16px;
-    background: var(--base-lo);
+    /* portrait plinth, centred — a device on a mount, not a phone stranded
+       in a landscape canvas the shape of a desktop window */
+    width: 100%;
+    max-width: 340px;
+    margin-inline: auto;
+    aspect-ratio: 4 / 5;
+    padding: 32px 24px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--glass-line);
+    background: radial-gradient(ellipse 76% 64% at 50% 46%, rgba(22, 91, 116, 0.3), transparent 70%),
+      var(--base-lo);
   }
   .phone-frame {
-    width: 132px;
-    aspect-ratio: 9 / 19;
+    width: auto;
+    height: 100%;
+    aspect-ratio: 9 / 19.5;
     flex: none;
     border-radius: var(--r-device);
     border: 2px solid rgba(245, 243, 239, 0.22);
@@ -351,12 +462,24 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
+    transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .project-shot--device:hover .phone-frame {
+    transform: translateY(-4px);
   }
   .phone-frame img {
-    width: 58%;
+    width: 54%;
     height: auto;
     display: block;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .phone-frame {
+      transition: none;
+    }
+    .project-shot--device:hover .phone-frame {
+      transform: none;
+    }
   }
 
   .project-meta {
@@ -409,6 +532,42 @@
     border-color: var(--accent);
     color: var(--accent-deep);
   }
+  .status {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: var(--t-micro);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: var(--r-pill);
+    white-space: nowrap;
+    border: 1px solid;
+  }
+  .status__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .status--live {
+    color: var(--ok);
+    background: var(--ok-soft);
+    border-color: var(--ok-line);
+  }
+  .status--dev {
+    color: var(--warn);
+    background: var(--warn-soft);
+    border-color: var(--warn-line);
+  }
+  .status--offline {
+    color: var(--danger);
+    background: var(--danger-soft);
+    border-color: var(--danger-line);
+  }
+
   .tag-muted {
     color: var(--ink-soft);
     background: rgba(245, 243, 239, 0.05);
@@ -510,6 +669,18 @@
     margin-top: 8px;
     font-size: var(--t-sm);
     color: var(--ink);
+  }
+
+  .status-note {
+    margin-top: 24px;
+    padding: 16px 20px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--danger-line);
+    background: var(--danger-soft);
+    color: var(--ink-soft);
+    font-size: var(--t-sm);
+    line-height: 1.7;
+    max-width: 62ch;
   }
 
   /* ── colophon / numbered rows: shared by "how I work" and case studies ── */
