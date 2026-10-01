@@ -1,65 +1,94 @@
 ---
 import Base from "@/layouts/Base.astro";
+
+const types = ["New website", "Redesign", "Web application", "Native app", "Ongoing help", "Not sure yet"];
+
+const steps = [
+  { title: "I read it myself", body: "Every message comes straight to me. You'll hear back within a day or two." },
+  { title: "A 20-minute call", body: "We talk through what you need, what it's worth to you, and whether I'm the right fit." },
+  { title: "A written proposal", body: "Scope, timeline, and price in writing, before any work starts." },
+];
 ---
 
-<Base
-  title="Contact — JPX Website Development Co."
-  description="Get in touch about a full-stack web development project."
->
-  <div class="max-w-[640px] mx-auto px-8 pt-24 pb-28 md:pt-32">
-    <p class="eyebrow">Get in touch</p>
-    <h1 class="text-[40px] md:text-[56px] leading-[1.06] mt-8 max-w-[14ch]">
-      Let's talk about <em class="em-accent">your project.</em>
-    </h1>
-    <div class="rule mt-9"></div>
-    <p class="text-[16px] mt-9 mb-12 max-w-[48ch] leading-relaxed" style="color: var(--ink-soft);">
-      Tell me what you're building. I read every message myself and reply within a day or two.
-    </p>
+<Base title="Start a project — JPX Website Development Co." description="Tell me about the website or app you're trying to build.">
+  <div class="shell pt-20 pb-8 md:pt-28">
+    <div class="grid gap-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-24">
+      <!-- ── Left: the pitch and what happens next ─────────── -->
+      <div>
+        <h1 class="text-[52px] md:text-[80px] leading-[0.98] tracking-[-0.035em]">
+          Let's build<br /><span style="color: var(--ink-faint);">something good.</span>
+        </h1>
+        <p class="mt-8 max-w-[42ch]" style="font-size: var(--t-lg); color: var(--ink-soft);">
+          Tell me what you're trying to build — a rough idea is plenty. I'll tell you honestly whether I'm the right person
+          for it.
+        </p>
 
-    <form id="contact-form" class="project-card glass flex flex-col gap-6" style="padding: 28px;">
-      <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+        <ol class="mt-14" style="border-top: 1px solid var(--glass-line);">
+          {steps.map((s, i) => (
+            <li class="grid grid-cols-[32px_1fr] gap-4 py-5" style="border-bottom: 1px solid var(--glass-line);">
+              <span class="font-mono pt-[3px]" style="font-size: var(--t-xs); color: var(--accent);">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <p class="font-semibold">{s.title}</p>
+                <p class="mt-1" style="font-size: var(--t-sm); color: var(--ink-soft);">{s.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
 
-      <div class="field">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required />
+        <div class="mt-10" style="font-size: var(--t-sm); color: var(--ink-faint);">
+          <p>Rather talk first?</p>
+          <div class="flex flex-wrap gap-x-8">
+            <a href="mailto:info@jpxco.dev" class="link">info@jpxco.dev</a>
+            <a href="tel:+12247249020" class="link">(224) 724-9020</a>
+          </div>
+        </div>
       </div>
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required />
-      </div>
+      <!-- ── Right: the form ───────────────────────────────── -->
+      <form id="contact-form" class="panel flex flex-col gap-6 p-6 sm:p-10 self-start" novalidate>
+        <input type="text" name="company" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
 
-      <div class="field">
-        <label for="phone">Phone <span style="font-weight: 400; color: var(--ink-faint);">(optional, so I can call you back)</span></label>
-        <input type="tel" id="phone" name="phone" autocomplete="tel" />
-      </div>
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required />
+          </div>
+        </div>
 
-      <div class="field">
-        <label for="projectType">Project type</label>
-        <select id="projectType" name="projectType">
-          <option value="New website">New website</option>
-          <option value="Redesign">Redesign / rebuild</option>
-          <option value="Web application">Web application</option>
-          <option value="Ongoing help">Ongoing help / maintenance</option>
-          <option value="Not sure yet">Not sure yet</option>
-        </select>
-      </div>
+        <div class="field">
+          <label for="phone">Phone <span class="opt">— optional, if you'd like a call back</span></label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" />
+        </div>
 
-      <div class="field">
-        <label for="message">What are you trying to build?</label>
-        <textarea id="message" name="message" rows="5" required></textarea>
-      </div>
+        <fieldset class="field">
+          <legend class="mb-2" style="font-size: var(--t-sm); font-weight: 500; color: var(--ink-soft);">
+            What kind of project?
+          </legend>
+          <div class="chips">
+            {types.map((t, i) => (
+              <label class="chip">
+                <input type="radio" name="projectType" value={t} checked={i === 0} />
+                <span>{t}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
 
-      <button type="submit" class="btn" id="contact-submit">Send message</button>
-      <p id="contact-status" class="text-[14px]" style="color: var(--ink-soft);"></p>
-    </form>
+        <div class="field">
+          <label for="message">What are you trying to build?</label>
+          <textarea id="message" name="message" rows="6" maxlength="4000" required></textarea>
+        </div>
 
-    <p class="text-center mt-10 text-[14.5px]" style="color: var(--ink-soft);">
-      Prefer to talk it through first? Email
-      <a href="mailto:info@jpxco.dev" style="color: var(--accent);">info@jpxco.dev</a>
-      or call
-      <a href="tel:+12247249020" style="color: var(--accent);">(224) 724-9020</a>.
-    </p>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <button type="submit" class="btn" id="contact-submit">Send message <span class="arr" aria-hidden="true">→</span></button>
+          <p id="contact-status" role="status" aria-live="polite" style="font-size: var(--t-sm); color: var(--ink-soft);"></p>
+        </div>
+      </form>
+    </div>
   </div>
 </Base>
 
@@ -67,10 +96,27 @@ import Base from "@/layouts/Base.astro";
   const form = document.getElementById("contact-form") as HTMLFormElement | null;
   const status = document.getElementById("contact-status");
   const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+  const label = submitBtn?.innerHTML ?? "Send message";
+
+  const fail = (text: string) => {
+    if (!status || !submitBtn) return;
+    status.textContent = text;
+    status.style.color = "var(--danger)";
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = label;
+  };
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!status || !submitBtn) return;
+
+    // native constraint validation, reported in our own voice
+    const invalid = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(":invalid");
+    if (invalid) {
+      invalid.focus();
+      fail(invalid.type === "email" ? "That email address doesn't look quite right." : "Name, email, and a message, please.");
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = "Sending…";
@@ -79,23 +125,16 @@ import Base from "@/layouts/Base.astro";
     try {
       const res = await fetch("/api/contact", { method: "POST", body: new FormData(form) });
       const result = await res.json();
-
       if (result.ok) {
         form.reset();
-        status.textContent = "Thanks — I'll get back to you within a day or two.";
-        status.style.color = "var(--accent)";
+        status.textContent = "Thanks — it's with me. I'll reply within a day or two.";
+        status.style.color = "var(--ok)";
         submitBtn.textContent = "Sent";
       } else {
-        status.textContent = result.error ?? "Something went wrong. Try again shortly.";
-        status.style.color = "var(--warm)";
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Send message";
+        fail(result.error ?? "Something went wrong. Try again shortly.");
       }
     } catch {
-      status.textContent = "Something went wrong. Try again shortly.";
-      status.style.color = "var(--warm)";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Send message";
+      fail("Something went wrong. Try again shortly.");
     }
   });
 </script>

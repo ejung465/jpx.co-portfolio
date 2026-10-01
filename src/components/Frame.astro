@@ -1,0 +1,61 @@
+---
+import type { Project } from "@/data/projects";
+
+interface Props {
+  project: Project;
+  /** name the frame for the cross-page morph into its case study */
+  transition?: boolean;
+  /** first-screen images load eagerly */
+  eager?: boolean;
+  /** with no live site, link to the case study — off when already on it */
+  selfLink?: boolean;
+  class?: string;
+}
+
+const { project, transition = false, eager = false, selfLink = true, class: className } = Astro.props;
+
+// A full-page capture scrolls inside the window on hover. Duration scales with
+// page length so a long page reads at the same pace as a short one.
+const scrolls = Boolean(project.page);
+const src = project.page ?? project.image;
+const pageHeights: Record<string, number> = {
+  "/images/shots/nh-small-claims-page.jpg": 2627,
+  "/images/shots/alloy-mentors-page.jpg": 1875,
+  "/images/shots/ambry-calendar-page.jpg": 3033,
+};
+const height = pageHeights[src] ?? 750;
+const scrollDur = `${Math.max(3, Math.round((height / 750) * 2.2 * 10) / 10)}s`;
+
+const external = Boolean(project.external);
+const href = project.external ?? (selfLink ? project.href : undefined);
+const Tag = href ? "a" : "div";
+---
+
+<Tag
+  href={href}
+  class:list={["frame", scrolls && "frame--scroll", className]}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  aria-label={href ? (external ? `Visit ${project.displayUrl} (opens in a new tab)` : `${project.name} case study`) : undefined}
+  style={[
+    transition ? `view-transition-name: shot-${project.slug}` : "",
+    `--scroll-dur: ${scrollDur}`,
+  ].join(";")}
+>
+  <div class="frame__bar" aria-hidden="true">
+    <i></i><i></i><i></i>
+    <span class="frame__url">{project.displayUrl}</span>
+    <span class="frame__ext">{external ? "↗" : ""}</span>
+  </div>
+  <div class="frame__view">
+    <img
+      src={src}
+      alt={project.imageAlt}
+      width="1200"
+      height={height}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+    />
+  </div>
+  {scrolls && <span class="frame__hint" aria-hidden="true">Scrolling the full page</span>}
+</Tag>

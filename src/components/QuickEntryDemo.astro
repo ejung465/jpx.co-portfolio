@@ -1,0 +1,271 @@
+---
+// A working miniature of Ambry Calendar's grid quick entry. The pattern and
+// time normalization mirror the production parser exactly — strict
+// HHMM-HHMM: title, nothing guessed.
+const days = ["Mon 13", "Tue 14", "Wed 15"];
+const cats = ["Work", "Practice", "Personal"];
+---
+
+<div class="qe panel" data-qe>
+  <div class="qe__grid" role="group" aria-label="Sample week">
+    <div class="qe__corner"></div>
+    {cats.map((c) => <div class="qe__col">{c}</div>)}
+    {days.map((d, r) => (
+      <>
+        <div class="qe__day">{d}</div>
+        {cats.map((c, ci) => (
+          <button
+            type="button"
+            class:list={["qe__cell", r === 1 && ci === 2 && "is-target"]}
+            data-cell={`${r}-${ci}`}
+            aria-label={`${d}, ${c}`}
+          >
+            {r === 0 && ci === 1 && <span class="qe__ev qe__ev--ok">1600-1800: Track</span>}
+            {r === 2 && ci === 0 && <span class="qe__ev qe__ev--tbd">0900-1000: Standup</span>}
+          </button>
+        ))}
+      </>
+    ))}
+  </div>
+
+  <form class="qe__entry" autocomplete="off">
+    <label for="qe-input" class="qe__label">
+      Type into <span data-qe-target>Tue 14 · Personal</span>
+    </label>
+    <div class="qe__row">
+      <input id="qe-input" class="qe__input" spellcheck="false" placeholder="1100-1500: Doctors appt" />
+      <button class="btn" type="submit">Add</button>
+    </div>
+    <p class="qe__out" aria-live="polite" data-qe-out>Pick a cell, then type a time range and a title.</p>
+  </form>
+</div>
+
+<style is:global>
+  /* global, because events created at runtime don't carry Astro's scope attribute */
+  .qe {
+    padding: 20px;
+  }
+  @media (min-width: 640px) {
+    .qe {
+      padding: 28px;
+    }
+  }
+  .qe__grid {
+    display: grid;
+    grid-template-columns: 76px repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  @media (max-width: 520px) {
+    .qe__grid {
+      grid-template-columns: 48px repeat(3, minmax(0, 1fr));
+      gap: 4px;
+    }
+    .qe__cell {
+      padding: 4px;
+    }
+    .qe .qe__ev {
+      padding: 4px 6px;
+      font-size: 10px;
+    }
+  }
+  .qe__col,
+  .qe__day {
+    font-size: var(--t-xs);
+    color: var(--ink-faint);
+    padding: 6px 4px;
+  }
+  .qe__day {
+    display: flex;
+    align-items: center;
+    color: var(--ink-soft);
+  }
+  .qe__cell {
+    position: relative;
+    min-height: 56px;
+    padding: 6px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--glass-line);
+    background: rgba(0, 0, 0, 0.22);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+  }
+  .qe__cell:hover {
+    border-color: var(--ink-ghost);
+  }
+  .qe__cell.is-target {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .qe__ev {
+    display: block;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+    overflow-wrap: anywhere;
+  }
+  .qe__ev--ok {
+    background: #2f7a4d;
+  }
+  .qe__ev--tbd {
+    background: #a06a12;
+  }
+  .qe__ev--new {
+    background: #1f5fbf;
+    animation: qe-pop 520ms var(--ease-out);
+  }
+  .qe__ev + .qe__ev {
+    margin-top: 4px;
+  }
+  @keyframes qe-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .qe__entry {
+    margin-top: 20px;
+  }
+  .qe__label {
+    font-size: var(--t-sm);
+    color: var(--ink-faint);
+  }
+  .qe__label span {
+    color: var(--accent);
+  }
+  .qe__row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .qe__input {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: var(--r-pill);
+    border: 1px solid var(--glass-line);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--ink);
+    font-family: "JetBrains Mono", monospace;
+    font-size: var(--t-sm);
+  }
+  .qe__input::placeholder {
+    color: var(--ink-ghost);
+  }
+  .qe__input:focus {
+    outline: none;
+    border-color: rgba(200, 169, 106, 0.55);
+    box-shadow: 0 0 0 3px rgba(200, 169, 106, 0.1);
+  }
+  .qe__out {
+    margin-top: 12px;
+    min-height: 1.6em;
+    font-size: var(--t-sm);
+    color: var(--ink-soft);
+  }
+  .qe__out code {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--ink);
+  }
+  .qe__out.is-error {
+    color: var(--danger);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .qe__ev--new {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Mirrors services/api/src/lib/parseQuickEntry.ts in the Ambry repo.
+  const PATTERN = /^\s*(\d{3,4})\s*-\s*(\d{3,4})\s*:\s*(.+?)\s*$/;
+  const hhmm = (raw: string) => {
+    const p = raw.length === 3 ? `0${raw}` : raw;
+    const h = Number(p.slice(0, 2));
+    const m = Number(p.slice(2, 4));
+    return h > 23 || m > 59 ? null : `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+  };
+  const parse = (text: string) => {
+    const match = PATTERN.exec(text);
+    if (!match) return null;
+    const start = hhmm(match[1]);
+    const end = hhmm(match[2]);
+    return start && end ? { start, end, title: match[3] } : null;
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-qe]").forEach((root) => {
+    const input = root.querySelector<HTMLInputElement>(".qe__input")!;
+    const out = root.querySelector<HTMLElement>("[data-qe-out]")!;
+    const targetLabel = root.querySelector<HTMLElement>("[data-qe-target]")!;
+    const form = root.querySelector("form")!;
+    let target = root.querySelector<HTMLElement>(".qe__cell.is-target")!;
+
+    root.querySelectorAll<HTMLElement>(".qe__cell").forEach((cell) => {
+      cell.addEventListener("click", () => {
+        target.classList.remove("is-target");
+        target = cell;
+        cell.classList.add("is-target");
+        targetLabel.textContent = cell.getAttribute("aria-label")!.replace(", ", " · ");
+        input.focus();
+      });
+    });
+
+    const commit = (text: string) => {
+      const result = parse(text);
+      if (!result) {
+        out.classList.add("is-error");
+        out.textContent = "That isn't strict HHMM-HHMM: title — Ambry won't guess at it.";
+        return false;
+      }
+      out.classList.remove("is-error");
+      const ev = document.createElement("span");
+      ev.className = "qe__ev qe__ev--new";
+      ev.textContent = `${result.start}–${result.end} ${result.title}`;
+      target.append(ev);
+      out.innerHTML = "";
+      out.append("Created ");
+      const code = document.createElement("code");
+      code.textContent = `${result.title}, ${result.start}–${result.end}`;
+      out.append(code, ` on ${targetLabel.textContent!.split(" · ")[0]}. No date picker.`);
+      return true;
+    };
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (commit(input.value)) input.value = "";
+    });
+
+    // Types the example once, the first time the demo scrolls into view.
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const sample = "1100-1500: Doctors appt";
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        if (calm) {
+          commit(sample);
+          return;
+        }
+        let i = 0;
+        const tick = () => {
+          if (document.activeElement === input) return; // the visitor took over
+          input.value = sample.slice(0, ++i);
+          if (i < sample.length) setTimeout(tick, 55 + Math.random() * 60);
+          else setTimeout(() => commit(input.value) && (input.value = ""), 450);
+        };
+        setTimeout(tick, 500);
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(root);
+  });
+</script>

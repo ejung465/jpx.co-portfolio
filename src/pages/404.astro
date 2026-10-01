@@ -1,0 +1,26 @@
+---
+import Base from "@/layouts/Base.astro";
+import { projects } from "@/data/projects";
+---
+
+<Base title="Not found — JPX Website Development Co." description="This page doesn't exist.">
+  <div class="shell pt-24 pb-10 md:pt-36">
+    <p class="font-mono" style="font-size: var(--t-xs); color: var(--accent);">404</p>
+    <h1 class="mt-6 text-[52px] md:text-[96px] leading-[0.98] tracking-[-0.035em]">
+      Nothing here.<br /><span style="color: var(--ink-faint);">Everything else is.</span>
+    </h1>
+    <div class="index mt-16">
+      {projects.map((p, i) => (
+        <a href={p.href} class="index__row">
+          <span class="index__n">{String(i + 1).padStart(2, "0")}</span>
+          <span class="index__name">{p.name}</span>
+          <span class="index__cat">{p.category}</span>
+          <span class="index__plat">{p.platforms}</span>
+          <span></span>
+          <span class="index__go" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+    <a href="/" class="link mt-8">← Back to the homepage</a>
+  </div>
+</Base>
