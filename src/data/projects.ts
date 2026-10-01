@@ -294,6 +294,62 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    slug: "blockwork-one",
+    name: "Blockwork One",
+    kind: "product",
+    category: "Sprint-start coach for iPhone",
+    headline: "Your start, measured.",
+    summary:
+      "Set the phone beside the blocks. It calls the start, films at 240 frames a second, runs pose estimation on the device, and speaks the one to three things to fix before you've walked back.",
+    year: "2026",
+    platforms: "iPhone",
+    status: "In development",
+    displayUrl: "blockworkone.com",
+    external: "https://blockworkone.com",
+    image: "/images/shots/blockwork-one.jpg",
+    page: "/images/shots/blockwork-one-page.jpg",
+    imageAlt: "The Blockwork One website",
+    icon: "/images/blockwork-one-icon.png",
+    brand: "#ff5a2b",
+    href: "/work/blockwork-one",
+    metaDescription:
+      "Blockwork One — an iPhone sprint-start coach that calls the start, films at 240 fps, and measures every rep with on-device pose estimation. Designed and built by JPX.",
+    engagement: {
+      brief:
+        "A sprinter training alone has no one to call the start, no way to see their own set position, and no timing better than a stopwatch. Blockwork One turns an iPhone propped beside the lane into the starter, a high-speed camera, and a coach — scoring the set, the push, and the first steps of every rep against the athlete's own best, without them touching the phone.",
+      scope: "Product, design & engineering",
+      practice: "JPX product",
+      delivered: "In TestFlight",
+    },
+    stack: ["Swift", "SwiftUI", "AVFoundation", "Vision", "SwiftData", "StoreKit 2", "React", "Vite", "Vercel"],
+    colophon: [
+      {
+        title: "Timing",
+        body: "The beep is scheduled on the audio engine at an exact host time. After the rep, the recorded microphone track is searched for the 2.4 kHz tone and that is the moment used — audio and video share one clock, so reaction and push times are measured against what the athlete actually heard.",
+      },
+      {
+        title: "Pose",
+        body: "Apple's Vision body-pose model runs across a window starting half a second before the beep. In a side view it often swaps left and right legs, so legs are re-labelled by motion continuity, and positions are smoothed with a Savitzky–Golay filter before any velocity is taken.",
+      },
+      {
+        title: "Coaching",
+        body: "Every rep is scored across the set, the push, and the first steps against reference ranges, then spoken back as one to three cues. Session summaries surface the faults that keep repeating, and trends compare you with your own best.",
+      },
+      {
+        title: "Engine",
+        body: "The analysis engine is pure Swift with no Apple frameworks, so it is tested on Linux CI against a synthetic sprinter rather than only by hand on a track.",
+      },
+      {
+        title: "No backend",
+        body: "On purpose. Pose estimation, storage, and subscription checks all run on the phone, so video never leaves it and the product costs nothing to operate per user.",
+      },
+      {
+        title: "Release",
+        body: "TestFlight builds are signed and uploaded from CI, and every screen is re-rendered on a simulator by the pipeline, so store screenshots never drift from the shipping interface.",
+      },
+    ],
+  },
 ];
 
 export const clientWork = projects.filter((p) => p.kind === "client");

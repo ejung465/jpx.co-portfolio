@@ -26,8 +26,8 @@ const disciplines = [
   },
   {
     title: "Native apps",
-    body: "SwiftUI for Mac and iPhone; React Native when one codebase needs to reach both app stores.",
-    refs: ["ambry-calendar", "alloy-mentors"],
+    body: "SwiftUI for Mac and iPhone — camera, audio, and on-device machine vision included — and React Native when one codebase needs to reach both stores.",
+    refs: ["blockwork-one", "ambry-calendar", "alloy-mentors"],
   },
   {
     title: "Data & infrastructure",
@@ -62,6 +62,7 @@ const toolbox = [
   "Next.js",
   "Astro",
   "Swift & SwiftUI",
+  "Vision & AVFoundation",
   "React Native",
   "PostgreSQL",
   "Supabase",
@@ -87,7 +88,7 @@ const toolbox = [
       <div class="hero__foot">
         <p class="hero__lede" data-hero-fade>
           JPX is <strong>Ethan Jung</strong> — designing and building websites, web applications, and native apps for
-          small businesses, nonprofits, and a couple of products of my own. One person, start to finish.
+          small businesses, nonprofits, and a few products of my own. One person, start to finish.
         </p>
 
         <div class="hero__actions" data-hero-fade="2">
@@ -191,17 +192,19 @@ const toolbox = [
       <div class="tiles">
         {products.map((p, i) => (
           <article class="tile" style={`--brand: ${p.brand}; --i: ${i}`} data-reveal>
-            <img class="tile__icon" src={p.icon} alt="" width="64" height="64" loading="lazy" />
-            <h3>{p.name}</h3>
-            <p class="tile__headline">{p.headline}</p>
-            <p class="tile__plat">{p.platforms} · {p.status}</p>
-            <div class="tile__links">
-              <a href={p.href} class="link">Learn more <span class="arr" aria-hidden="true">→</span></a>
-              {p.external && (
-                <a href={p.external} class="link link-soft" target="_blank" rel="noopener noreferrer">
-                  {p.displayUrl} <span class="arr arr--ext" aria-hidden="true">↗</span>
-                </a>
-              )}
+            <div class="tile__body">
+              <img class="tile__icon" src={p.icon} alt="" width="64" height="64" loading="lazy" />
+              <h3>{p.name}</h3>
+              <p class="tile__headline">{p.headline}</p>
+              <p class="tile__plat">{p.platforms} · {p.status}</p>
+              <div class="tile__links">
+                <a href={p.href} class="link">Learn more <span class="arr" aria-hidden="true">→</span></a>
+                {p.external && (
+                  <a href={p.external} class="link link-soft" target="_blank" rel="noopener noreferrer">
+                    {p.displayUrl} <span class="arr arr--ext" aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
             </div>
             <div class="tile__media">
               <Frame project={p} transition />
@@ -248,7 +251,7 @@ const toolbox = [
           <dl class="facts">
             <div><dt>Practice</dt><dd>Design & engineering</dd></div>
             <div><dt>Works with</dt><dd>Small businesses, nonprofits</dd></div>
-            <div><dt>Currently</dt><dd>Shipping Ambry Calendar and Alloy Mentors</dd></div>
+            <div><dt>Currently</dt><dd>Shipping Blockwork One, Ambry Calendar, and Alloy Mentors</dd></div>
             <div><dt>Email</dt><dd><a href="mailto:info@jpxco.dev">info@jpxco.dev</a></dd></div>
           </dl>
         </div>

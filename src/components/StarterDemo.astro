@@ -1,0 +1,188 @@
+---
+// A browser-sized version of Blockwork One's starter: marks, set, a random
+// hold, then a 2.4 kHz beep. Tap (or press space) on the beep. Early taps are
+// false starts, as on a track.
+---
+
+<div class="starter panel" data-starter>
+  <button type="button" class="starter__pad" data-pad aria-describedby="starter-out">
+    <span class="starter__call" data-call>Tap to start</span>
+    <span class="starter__sub" data-sub>Then react to the beep. Space works too.</span>
+  </button>
+  <div class="starter__foot">
+    <p id="starter-out" class="starter__out" aria-live="polite" data-out>&nbsp;</p>
+    <p class="starter__best">Best <span data-best>—</span></p>
+  </div>
+</div>
+
+<style>
+  .starter {
+    padding: 16px;
+  }
+  .starter__pad {
+    --flame: #ff5a2b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 260px;
+    border-radius: var(--r-lg);
+    border: 1px solid var(--glass-line);
+    background: radial-gradient(80% 90% at 50% 0%, rgba(255, 90, 43, 0.08), transparent 70%), rgba(0, 0, 0, 0.3);
+    color: var(--ink);
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background 120ms linear, border-color 160ms ease, transform 120ms ease;
+  }
+  .starter__pad:active {
+    transform: scale(0.99);
+  }
+  .starter__call {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .starter__sub {
+    font-size: var(--t-sm);
+    color: var(--ink-faint);
+  }
+  .starter__pad.is-set {
+    border-color: rgba(255, 90, 43, 0.35);
+  }
+  .starter__pad.is-go {
+    background: var(--flame);
+    border-color: var(--flame);
+    color: #0a0a0b;
+  }
+  .starter__pad.is-go .starter__sub {
+    color: rgba(10, 10, 11, 0.7);
+  }
+  .starter__pad.is-false {
+    border-color: var(--danger-line);
+    background: var(--danger-soft);
+  }
+  .starter__foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 6px 2px;
+    font-size: var(--t-sm);
+    color: var(--ink-soft);
+  }
+  .starter__best {
+    color: var(--ink-faint);
+  }
+  .starter__best span {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--ink);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-starter]").forEach((root) => {
+    const pad = root.querySelector<HTMLButtonElement>("[data-pad]")!;
+    const call = root.querySelector<HTMLElement>("[data-call]")!;
+    const sub = root.querySelector<HTMLElement>("[data-sub]")!;
+    const out = root.querySelector<HTMLElement>("[data-out]")!;
+    const bestEl = root.querySelector<HTMLElement>("[data-best]")!;
+
+    type Phase = "idle" | "marks" | "set" | "go" | "done";
+    let phase: Phase = "idle";
+    let timers: number[] = [];
+    let goAt = 0;
+    let best = Infinity;
+    let audio: AudioContext | null = null;
+
+    const show = (text: string, hint: string, cls = "") => {
+      call.textContent = text;
+      sub.textContent = hint;
+      pad.className = `starter__pad ${cls}`.trim();
+    };
+    const clear = () => {
+      timers.forEach(clearTimeout);
+      timers = [];
+    };
+    const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(fn, ms));
+
+    // 2.4 kHz, the same tone the app listens for in its recording.
+    const beep = () => {
+      if (!audio) return;
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.frequency.value = 2400;
+      gain.gain.setValueAtTime(0.0001, audio.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.08, audio.currentTime + 0.005);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.14);
+      osc.connect(gain).connect(audio.destination);
+      osc.start();
+      osc.stop(audio.currentTime + 0.15);
+    };
+
+    const start = () => {
+      try {
+        audio ??= new AudioContext();
+        audio.resume();
+      } catch {
+        audio = null;
+      }
+      phase = "marks";
+      out.innerHTML = "&nbsp;";
+      show("On your marks…", "Settle in.");
+      later(() => {
+        phase = "set";
+        show("Set…", "Hold still.", "is-set");
+        later(
+          () => {
+            phase = "go";
+            beep();
+            show("Go", "Tap now.", "is-go");
+            // stamp when the frame showing "Go" is actually painted
+            requestAnimationFrame(() => (goAt = performance.now()));
+          },
+          1200 + Math.random() * 1400,
+        );
+      }, 1600);
+    };
+
+    const react = () => {
+      if (phase === "idle" || phase === "done") return start();
+      if (phase === "marks") return; // still walking up, as on a track
+      if (phase === "set") {
+        clear();
+        phase = "done";
+        show("False start", "You moved before the beep. Tap to go again.", "is-false");
+        out.textContent = "Blockwork catches rocking in set, too.";
+        return;
+      }
+      const ms = Math.max(0, performance.now() - (goAt || performance.now()));
+      phase = "done";
+      best = Math.min(best, ms);
+      bestEl.textContent = `${(best / 1000).toFixed(3)} s`;
+      show(`${(ms / 1000).toFixed(3)} s`, "Tap to go again.");
+      out.textContent =
+        ms < 100
+          ? "Under 0.100 s counts as a false start in competition. Lucky guess?"
+          : "Includes your screen and input lag — the app times from the recorded beep instead.";
+    };
+
+    pad.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      react();
+    });
+    // keyboard: space/enter fire a click on a button; use that path for non-pointer input
+    pad.addEventListener("click", (e) => {
+      if (e.detail === 0) react();
+    });
+    root.addEventListener("keydown", (e) => {
+      if (e.key === " " && document.activeElement !== pad) {
+        e.preventDefault();
+        react();
+      }
+    });
+  });
+</script>
