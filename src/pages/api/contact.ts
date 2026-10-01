@@ -4,9 +4,31 @@ import { Resend } from "resend";
 export const prerender = false;
 
 const TO_EMAIL = "contact@jpxco.dev";
+
+// Browsers always send Origin on a cross-site POST; only our own pages may
+// submit. Vercel preview deployments and local dev are allowed too.
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return false;
+  try {
+    const { hostname } = new URL(origin);
+    return (
+      hostname === "jpxco.dev" ||
+      hostname === "www.jpxco.dev" ||
+      hostname.endsWith(".vercel.app") ||
+      hostname === "localhost" ||
+      hostname === "127.0.0.1"
+    );
+  } catch {
+    return false;
+  }
+}
 const MAX_MESSAGE_LENGTH = 4000;
 
 export const POST: APIRoute = async ({ request }) => {
+  if (!isAllowedOrigin(request.headers.get("origin"))) {
+    return new Response(JSON.stringify({ ok: false, error: "Forbidden" }), { status: 403 });
+  }
+
   const data = await request.formData();
 
   // honeypot — real visitors never fill this in, bots usually do
