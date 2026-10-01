@@ -1,156 +1,145 @@
 ---
 import Base from "@/layouts/Base.astro";
-import type { Project } from "@/data/projects";
+import Frame from "@/components/Frame.astro";
+import { nextProject, statusClass, type Project } from "@/data/projects";
 
 interface Props {
   project: Project;
   /**
-   * Where the top-left return link points.
-   * Default returns to the work index on this site. Pass a client-site
-   * destination (or `null` to hide it entirely) when this same record is
-   * published from somewhere other than the portfolio.
+   * Where the top-left return link points. Defaults to the work index; pass
+   * `null` to hide it when this record is published somewhere else.
    */
   backLink?: { href: string; label: string } | null;
 }
 
 const { project, backLink } = Astro.props;
-const back = backLink === undefined ? { href: "/#work", label: "Back to work" } : backLink;
-const hasColophon = project.colophon.length > 0;
-const statusClass = {
-  "In service": "status status--live",
-  "In development": "status status--dev",
-  Offline: "status status--offline",
-}[project.status];
-const hasStack = project.stack.length > 0;
+const back =
+  backLink === undefined
+    ? { href: project.kind === "product" ? "/#products" : "/#work", label: "All work" }
+    : backLink;
+const next = nextProject(project.slug);
+const kindLabel = project.kind === "product" ? "JPX product" : "Client work";
 ---
 
-<Base title={`${project.name} — JPX Website Development Co.`} description={project.metaDescription}>
-  <div class="shell-narrow pt-16 pb-8">
-    {back && (
-      <a href={back.href} class="link-ghost" style="font-size: var(--t-sm);">
-        <span aria-hidden="true">←</span> {back.label}
-      </a>
-    )}
-  </div>
-
-  <!-- ── The engagement ───────────────────────────────────── -->
-  <div class="shell-narrow">
-    <p class="eyebrow mt-8">The engagement</p>
-
-    <h1 class="text-[38px] md:text-[52px] mt-5">{project.name}</h1>
-
-    <p class="lede mt-6 max-w-[54ch]">{project.engagement.brief}</p>
-
-    <dl class="spec">
-      <div>
-        <dt>Scope</dt>
-        <dd>{project.engagement.scope}</dd>
-      </div>
-      <div>
-        <dt>Practice</dt>
-        <dd>{project.engagement.practice}</dd>
-      </div>
-      <div>
-        <dt>Delivered</dt>
-        <dd>{project.engagement.delivered}</dd>
-      </div>
-      <div>
-        <dt>Status</dt>
-        <dd>
-          <span class={statusClass}>
-            <span class="status__dot" aria-hidden="true"></span>
-            {project.status}
-          </span>
-        </dd>
-      </div>
-    </dl>
-
-    {project.statusNote && (
-      <p class="status-note">{project.statusNote}</p>
-    )}
-  </div>
-
-  <!-- ── Live preview ─────────────────────────────────────── -->
-  <div class="shell-narrow mt-16">
-    <a
-      href={project.external ?? project.href}
-      class="project-shot"
-      target={project.external ? "_blank" : undefined}
-      rel={project.external ? "noopener noreferrer" : undefined}
-      aria-label={project.external ? `Open ${project.displayUrl} in a new tab` : project.name}
-    >
-      <div class="browser-chrome__bar">
-        <i></i><i></i><i></i>
-        <span>{project.displayUrl}</span>
-        {project.external && <span class="ext" aria-hidden="true">↗</span>}
-      </div>
-
-      {project.frame === "phone" ? (
-        <div class="phone-stage" style="padding: 56px 16px;">
-          <div class="phone-frame" style="width: 176px;">
-            <img src={project.image} alt={project.imageAlt} decoding="async" />
-          </div>
-        </div>
-      ) : (
-        <div class="card-shot">
-          <img src={project.image} alt={project.imageAlt} decoding="async" />
-        </div>
+<Base title={`${project.name} — JPX Website Development Co.`} description={project.metaDescription} progress>
+  <div class="shell">
+    <!-- ── Header ───────────────────────────────────────────── -->
+    <header class="case-head">
+      {back && (
+        <a href={back.href} class="link link-soft">
+          <span aria-hidden="true">←</span> {back.label}
+        </a>
       )}
-    </a>
 
-    {project.external && (
-      <p
-        class="mt-4 font-mono uppercase"
-        style="font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
-      >
-        Preview captured from the live site — select it to open {project.displayUrl}
+      <p class="case-head__kicker mt-10">
+        {project.icon && <img src={project.icon} alt="" width="28" height="28" class="rounded-[7px]" />}
+        <span style="color: var(--accent);">{kindLabel}</span>
+        <span aria-hidden="true">·</span>
+        <span>{project.category}</span>
       </p>
-    )}
+      <h1>{project.name}</h1>
+      <p class="case-head__headline">{project.headline}</p>
+
+      <dl class="spec">
+        <div>
+          <dt>Scope</dt>
+          <dd>{project.engagement.scope}</dd>
+        </div>
+        <div>
+          <dt>Practice</dt>
+          <dd>{project.engagement.practice}</dd>
+        </div>
+        <div>
+          <dt>Delivered</dt>
+          <dd>{project.engagement.delivered}</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>
+            <span class={statusClass[project.status]}>
+              <span class="status__dot" aria-hidden="true"></span>
+              {project.status}
+            </span>
+          </dd>
+        </div>
+      </dl>
+
+      {project.statusNote && <p class="status-note">{project.statusNote}</p>}
+    </header>
+
+    <!-- ── Hero capture: morphs from the homepage frame ─────── -->
+    <figure class="case-hero">
+      <Frame project={project} transition eager selfLink={false} />
+      <figcaption class="case-hero__caption">
+        <span>
+          {project.external
+            ? project.page
+              ? `Captured from ${project.displayUrl} — hover to scroll the full page, select to visit.`
+              : `Captured from ${project.displayUrl} — select to visit.`
+            : `${project.displayUrl}, as delivered.`}
+        </span>
+        <span>{project.platforms}</span>
+      </figcaption>
+    </figure>
   </div>
 
-  <!-- ── Stack ────────────────────────────────────────────── -->
-  {hasStack && (
-    <div class="shell-narrow mt-16">
-      <p class="eyebrow eyebrow-muted">Built with</p>
-      <div class="flex flex-wrap gap-2 mt-5">
-        {project.stack.map((t) => <span class="tag">{t}</span>)}
-        {project.external && (
-          <a href={project.external} target="_blank" rel="noopener noreferrer" class="tag">
-            {project.displayUrl} <span aria-hidden="true">↗</span>
-          </a>
-        )}
-      </div>
-    </div>
-  )}
+  <div class="shell">
+    <!-- ── Brief ────────────────────────────────────────────── -->
+    <section class="case-block" aria-labelledby="brief-title" data-reveal>
+      <h2 id="brief-title">The brief</h2>
+      <p class="case-lede">{project.engagement.brief}</p>
+    </section>
 
-  <!-- ── Colophon ─────────────────────────────────────────── -->
-  {hasColophon && (
-    <div class="shell-narrow mt-20">
-      <p class="eyebrow">Colophon</p>
-      <div class="numbered mt-6">
-        {project.colophon.map((entry, i) => (
-          <div class="numbered__row">
-            <span class="numbered__n">{String(i + 1).padStart(2, "0")}</span>
-            <div>
+    <!-- ── Stack ────────────────────────────────────────────── -->
+    {project.stack.length > 0 && (
+      <section class="case-block" aria-labelledby="stack-title" data-reveal>
+        <h2 id="stack-title">Built with</h2>
+        <ul class="flex flex-wrap gap-2">
+          {project.stack.map((t) => <li class="tag">{t}</li>)}
+          {project.external && (
+            <li>
+              <a href={project.external} target="_blank" rel="noopener noreferrer" class="tag tag-muted">
+                {project.displayUrl} <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          )}
+        </ul>
+      </section>
+    )}
+
+    <!-- ── Colophon ─────────────────────────────────────────── -->
+    {project.colophon.length > 0 && (
+      <section class="case-block" aria-labelledby="colophon-title">
+        <h2 id="colophon-title" data-reveal>Colophon</h2>
+        <div class="colophon">
+          {project.colophon.map((entry, i) => (
+            <div class="colophon__row" data-reveal style={`--i: ${i % 3}`}>
               <h3>{entry.title}</h3>
               <p>{entry.body}</p>
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )}
+          ))}
+        </div>
+      </section>
+    )}
 
-  <!-- ── Optional long-form notes ─────────────────────────── -->
-  <div class="shell-narrow">
+    <!-- ── Long-form notes, per project ─────────────────────── -->
     <slot />
-  </div>
 
-  <!-- ── Close ────────────────────────────────────────────── -->
-  <div class="shell-narrow mt-20 pt-12" style="border-top: 1px solid var(--glass-line);">
-    <div class="flex flex-wrap items-center gap-8">
-      <a href="/contact" class="btn">Book a 20-min call</a>
-      <a class="link-ghost" href="/#work">More work <span class="arr">→</span></a>
+    <!-- ── Next ─────────────────────────────────────────────── -->
+    <a href={next.href} class="next" data-reveal>
+      <div>
+        <p class="next__label">Next project</p>
+        <p class="next__name">{next.name} <span aria-hidden="true">→</span></p>
+        <p class="next__headline">{next.headline}</p>
+      </div>
+      <div class="next__shot">
+        <img src={next.image} alt="" width="1200" height="750" loading="lazy" decoding="async" />
+      </div>
+    </a>
+
+    <div class="flex flex-wrap items-center gap-x-8 gap-y-2 mt-16">
+      <a href="/contact" class="btn">Start a project <span class="arr" aria-hidden="true">→</span></a>
+      <a class="link link-soft" href="/">Back to the index</a>
     </div>
   </div>
 </Base>

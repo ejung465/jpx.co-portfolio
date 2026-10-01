@@ -1,169 +1,304 @@
 ---
 import Base from "@/layouts/Base.astro";
-import ProjectCard from "@/components/ProjectCard.astro";
-import { projects } from "@/data/projects";
+import Frame from "@/components/Frame.astro";
+import { projects, clientWork, products } from "@/data/projects";
 
-const approach = [
+// Full class names, written out so Tailwind's content scan keeps them.
+const statusKey = {
+  "In service": "index__status--live",
+  "In development": "index__status--dev",
+  Offline: "index__status--offline",
+} as const;
+
+const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));
+
+// What I do, cross-referenced to where it was actually done.
+const disciplines = [
   {
-    title: "One point of contact",
+    title: "Interface design",
+    body: "Type systems, layout, and motion — the small, deliberate details that make a site feel considered rather than assembled.",
+    refs: ["nh-small-claims", "miw-architects", "ambry-calendar"],
+  },
+  {
+    title: "Web applications",
+    body: "Accounts, review queues, dashboards, and the administrative tooling an organization runs every day without calling a developer.",
+    refs: ["in-the-beginning", "alloy-mentors"],
+  },
+  {
+    title: "Native apps",
+    body: "SwiftUI for Mac and iPhone — camera, audio, and on-device machine vision included — and React Native when one codebase needs to reach both stores.",
+    refs: ["blockwork-one", "ambry-calendar", "alloy-mentors"],
+  },
+  {
+    title: "Data & infrastructure",
+    body: "Postgres and MongoDB, object storage, realtime sync, authentication, and deployments you own outright.",
+    refs: ["in-the-beginning", "alloy-mentors", "ambry-calendar"],
+  },
+  {
+    title: "Care after launch",
+    body: "Content workflows a non-technical team can run on its own, and a direct line to the person who built it when something changes.",
+    refs: ["nh-small-claims", "miw-architects"],
+  },
+];
+
+const principles = [
+  {
+    title: "One point of contact.",
     body: "No account managers, no handoffs. You talk to the person writing the code, from the first call to the last deploy.",
   },
   {
-    title: "Built to be handed over",
-    body: "Software is only finished when the people who own it can run it alone. Every build ships with an interface its stewards can operate without an engineer present.",
+    title: "Built to be handed over.",
+    body: "Software is finished when the people who own it can run it alone. Every build ships with tools its stewards can operate.",
   },
   {
-    title: "Durable by default",
-    body: "Conventional architecture, infrastructure you own, and no dependency that cannot be replaced. What is built this year should still be maintainable long after.",
+    title: "Durable by default.",
+    body: "Conventional architecture, infrastructure you own, and no dependency that can't be replaced. It should still be maintainable years from now.",
   },
+];
+
+const toolbox = [
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Astro",
+  "Swift & SwiftUI",
+  "Vision & AVFoundation",
+  "React Native",
+  "PostgreSQL",
+  "Supabase",
+  "MongoDB",
+  "Tailwind CSS",
+  "Vercel",
+  "Cloudflare",
 ];
 ---
 
 <Base
-  title="JPX Website Development Co. — Full-stack web development"
-  description="Full-stack web development for small businesses and nonprofits. Built properly, by one person who picks up the phone."
+  title="JPX Website Development Co. — Websites, web apps & native apps"
+  description="Hi, I'm Ethan Jung. I design and build websites, web apps, and native apps — for the corner shop, the nonprofit, the startup, and everything in between."
 >
   <div class="shell">
-    <!-- ── Masthead ─────────────────────────────────────────── -->
-    <section class="masthead pt-24 pb-24 md:pt-36 md:pb-32">
-      <p class="availability">
-        <span class="availability__dot"></span> Available — taking on new projects
-      </p>
-
-      <h1 class="masthead__title mt-8">
-        Full-stack web development for small businesses <em class="em-accent">and nonprofits.</em>
+    <!-- ── Hero ─────────────────────────────────────────────── -->
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="hero__title">
+        <span class="line"><span>Small studio.</span></span>
+        <span class="line"><span class="soft">Serious software.</span></span>
       </h1>
 
-      <div class="masthead__foot">
-        <div>
-          <div class="rule"></div>
-          <p class="lede max-w-[44ch] mt-7">
-            Built properly, by one person who picks up the phone — design, code, and the
-            unglamorous infrastructure in between.
-          </p>
-        </div>
+      <div class="hero__foot">
+        <p class="hero__lede" data-hero-fade>
+          Hi, I'm <strong>Ethan Jung</strong>. I design and build websites, web apps, and native apps for anyone who
+          needs one built well — the corner shop, the nonprofit, the startup, and everything in between. One person,
+          first sketch to launch, and still picking up the phone after.
+        </p>
 
-        <div class="masthead__actions">
-          <a href="/contact" class="btn">Book a 20-min call</a>
-          <a class="link-ghost" href="#work">See the work <span class="arr">→</span></a>
+        <div class="hero__actions" data-hero-fade="2">
+          <a href="/contact" class="btn">Start a project <span class="arr" aria-hidden="true">→</span></a>
+          <a class="link link-soft" href="#work">See the work <span class="arr" aria-hidden="true">↓</span></a>
         </div>
       </div>
     </section>
 
-    <!-- ── Selected work ────────────────────────────────────── -->
-    <section id="work" class="section scroll-mt-28">
-      <div class="rail">
-        <p class="eyebrow pt-1">Selected work</p>
-
-        <div>
-          <p class="max-w-[52ch] mb-10" style="color: var(--ink-soft);">
-            Four engagements, built end to end — the interface, the data layer, and the administrative
-            tooling the client actually runs day to day.
-          </p>
-
-          <div class="grid sm:grid-cols-2 gap-5">
-            {projects.map((project) => (
-              <div class={project.wide ? "sm:col-span-2" : ""}>
-                <ProjectCard project={project} />
-              </div>
-            ))}
-          </div>
+    <!-- ── Index ────────────────────────────────────────────── -->
+    <section aria-label="Project index" data-hero-fade="2">
+      <div class="index" data-index>
+        <div class="index__head" aria-hidden="true">
+          <span>Index</span>
+          <span>{projects.length} projects · {clientWork.length} client, {products.length} in-house</span>
         </div>
+        {projects.map((p, i) => (
+          <a href={p.href} class="index__row" data-slug={p.slug}>
+            <span class="index__n">{String(i + 1).padStart(2, "0")}</span>
+            <span class="index__name">{p.name}</span>
+            <span class="index__cat">{p.category}</span>
+            <span class="index__plat">{p.platforms}</span>
+            <span class={`index__status ${statusKey[p.status]}`}>
+              <i aria-hidden="true"></i><span>{p.status}</span>
+            </span>
+            <span class="index__go" aria-hidden="true">→</span>
+          </a>
+        ))}
       </div>
     </section>
 
-    <!-- ── How I work ───────────────────────────────────────── -->
-    <section id="approach" class="section scroll-mt-28">
-      <div class="rail">
-        <p class="eyebrow pt-1">How I work</p>
+    <!-- lives outside the animated section: a transformed ancestor would break position: fixed -->
+    <div class="index-preview" aria-hidden="true">
+      {projects.map((p) => <img src={p.image} alt="" data-slug={p.slug} width="1200" height="750" loading="lazy" decoding="async" />)}
+    </div>
 
-        <div class="numbered">
-          {approach.map((item, i) => (
-            <div class="numbered__row">
-              <span class="numbered__n">{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
+    <!-- ── Client work ──────────────────────────────────────── -->
+    <section id="work" class="section scroll-mt-28" aria-labelledby="work-title">
+      <div class="section-head" data-reveal>
+        <h2 id="work-title">Client work<span class="count">{String(clientWork.length).padStart(2, "0")}</span></h2>
+        <p class="hidden sm:block">Interface, data layer, and the tooling clients run day to day</p>
+      </div>
+
+      <div class="features">
+        {clientWork.map((p, i) => (
+          <article class:list={["feature", i % 2 === 1 && "feature--flip"]}>
+            <div class="feature__media">
+              <Frame project={p} transition />
+            </div>
+
+            <div class="feature__body" data-reveal>
+              <p class="feature__meta">
+                <span class="n">{String(i + 1).padStart(2, "0")}</span>
+                <span>{p.category}</span>
+                <span aria-hidden="true">·</span>
+                <span>{p.year}</span>
+              </p>
+              <h3>{p.name}</h3>
+              <p class="feature__headline">{p.headline}</p>
+              <p class="feature__summary">{p.summary}</p>
+
+              <dl class="feature__facts">
+                <dt>Role</dt>
+                <dd>{p.engagement.practice}, {p.engagement.scope.toLowerCase()}</dd>
+                <dt>Built with</dt>
+                <dd>{p.stack.slice(0, 4).join(", ")}</dd>
+                <dt>Status</dt>
+                <dd>
+                  <span class={`index__status ${statusKey[p.status]}`}>
+                    <i aria-hidden="true"></i><span>{p.status}</span>
+                  </span>
+                </dd>
+              </dl>
+
+              <div class="feature__links">
+                <a href={p.href} class="link">Read the case study <span class="arr" aria-hidden="true">→</span></a>
+                {p.external && (
+                  <a href={p.external} class="link link-soft" target="_blank" rel="noopener noreferrer">
+                    Visit {p.displayUrl} <span class="arr arr--ext" aria-hidden="true">↗</span>
+                  </a>
+                )}
               </div>
             </div>
-          ))}
-        </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── Products ─────────────────────────────────────────── -->
+    <section id="products" class="section scroll-mt-28" aria-labelledby="products-title">
+      <div class="section-head" data-reveal>
+        <h2 id="products-title">Products<span class="count">{String(products.length).padStart(2, "0")}</span></h2>
+        <p class="hidden sm:block">Designed, built, and run by JPX</p>
+      </div>
+
+      <p class="section-intro" data-reveal>
+        Alongside client work, I build and run software of my own. <span class="soft">It's where the hard problems get
+        solved first — and where clients' projects quietly benefit.</span>
+      </p>
+
+      <div class="tiles">
+        {products.map((p, i) => (
+          <article class="tile" style={`--brand: ${p.brand}; --i: ${i}`} data-reveal>
+            <div class="tile__body">
+              <img class="tile__icon" src={p.icon} alt="" width="64" height="64" loading="lazy" />
+              <h3>{p.name}</h3>
+              <p class="tile__headline">{p.headline}</p>
+              <p class="tile__plat">{p.platforms} · {p.status}</p>
+              <div class="tile__links">
+                <a href={p.href} class="link">Learn more <span class="arr" aria-hidden="true">→</span></a>
+                {p.external && (
+                  <a href={p.external} class="link link-soft" target="_blank" rel="noopener noreferrer">
+                    {p.displayUrl} <span class="arr arr--ext" aria-hidden="true">↗</span>
+                  </a>
+                )}
+              </div>
+            </div>
+            <div class="tile__media">
+              <Frame project={p} transition />
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── What I do ────────────────────────────────────────── -->
+    <section id="disciplines" class="section scroll-mt-28" aria-labelledby="disciplines-title">
+      <div class="section-head" data-reveal>
+        <h2 id="disciplines-title">What I do</h2>
+        <p class="hidden sm:block">And where you can see it</p>
+      </div>
+
+      <div class="disciplines">
+        {disciplines.map((d, i) => (
+          <div class="discipline" data-reveal style={`--i: ${i}`}>
+            <h3>{d.title}</h3>
+            <p>{d.body}</p>
+            <div class="discipline__refs">
+              {d.refs.map((slug) => (
+                <a href={bySlug[slug].href} class="tag tag-muted">{bySlug[slug].name}</a>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
     <!-- ── Principal ────────────────────────────────────────── -->
-    <section id="principal" class="section scroll-mt-28">
-      <div class="rail">
-        <p class="eyebrow pt-1">Principal</p>
+    <section id="principal" class="section scroll-mt-28" aria-labelledby="principal-title">
+      <div class="section-head" data-reveal>
+        <h2>About</h2>
+        <p class="hidden sm:block">The person behind JPX</p>
+      </div>
 
-        <div>
-          <h2 class="text-[32px] md:text-[40px]">Ethan Jung</h2>
-          <p
-            class="font-mono uppercase mt-3"
-            style="font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
-          >
-            Founder · Systems Architect
-          </p>
+      <div class="principal">
+        <div data-reveal>
+          <h3 id="principal-title" class="principal__name">Ethan Jung</h3>
+          <p class="principal__role">Founder & principal, JPX Website Development Co.</p>
 
-          <div class="prose-case mt-8 max-w-[62ch]">
+          <dl class="facts">
+            <div><dt>Practice</dt><dd>Design & engineering</dd></div>
+            <div><dt>Works with</dt><dd>Businesses, nonprofits, founders — any size</dd></div>
+            <div><dt>Currently</dt><dd>Shipping Blockwork One, Ambry Calendar, and Alloy Mentors</dd></div>
+            <div><dt>Email</dt><dd><a href="mailto:info@jpxco.dev">info@jpxco.dev</a></dd></div>
+          </dl>
+        </div>
+
+        <div data-reveal style="--i: 1">
+          <div class="principal__bio">
+            <p>JPX is me. I design and build the whole thing — not just the page you see, but the system underneath it.</p>
             <p>
-              JPX is me. I design and build websites and web applications for small businesses and
-              nonprofits — not templated marketing pages, but the infrastructure underneath: registration
-              flows, admin dashboards, and the unglamorous plumbing that makes an organization's day-to-day
-              actually work.
+              Registration flows, admin dashboards, review queues, sync engines: the unglamorous plumbing that makes an
+              organization's day-to-day actually work. I'm the single point of authorship on every engagement, from the
+              first wireframe to production — and this site is a fair sample of the standard.
             </p>
             <p>
-              Single point of authorship on every engagement, from the first wireframe to production —
-              interface design, application architecture, data modeling, infrastructure, and the editorial
-              systems that keep a site current after launch. This site is a fair sample of the standard: the
-              type ramp, the grid, and the case studies were all built the same way I'd build yours.
-            </p>
-            <p>
-              Small businesses and nonprofits get the same rate, the same code quality, and the same
-              attention. I don't treat one as charity work and the other as the real job — and if a project
+              A neighborhood shop and a funded startup get the same code quality and the same attention. If a project
               isn't a good fit, I'll say so upfront instead of taking it anyway.
             </p>
+          </div>
+
+          <div class="principles">
+            {principles.map((p) => (
+              <div class="principle">
+                <h4 class="font-semibold" style="font-size: var(--t-md); line-height: 1.4;">{p.title}</h4>
+                <p>{p.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <div class="mt-10">
+            <p style="font-size: var(--t-sm); color: var(--ink-faint);">Toolbox</p>
+            <ul class="flex flex-wrap gap-2 mt-4">
+              {toolbox.map((t) => <li class="tag">{t}</li>)}
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ── Enquiries ────────────────────────────────────────── -->
-    <section class="section">
-      <div class="rail">
-        <p class="eyebrow pt-1">Enquiries</p>
-
-        <div>
-          <h2 class="text-[32px] md:text-[44px] max-w-[20ch]">
-            Have a project <em class="em-accent">in mind?</em>
-          </h2>
-          <p class="max-w-[46ch] mt-6" style="color: var(--ink-soft);">
-            Tell me what you're trying to build. I'll tell you honestly whether I'm the right fit.
-          </p>
-
-          <div class="flex flex-wrap items-center gap-8 mt-10">
-            <a href="/contact" class="btn">Book a 20-min call</a>
-            <div
-              class="flex flex-wrap items-center gap-x-8 gap-y-2 font-mono uppercase"
-              style="font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
-            >
-              <a href="mailto:info@jpxco.dev" class="enq-link">info@jpxco.dev</a>
-              <a href="tel:+12247249020" class="enq-link">(224) 724-9020</a>
-            </div>
-          </div>
-        </div>
+    <!-- ── Close ────────────────────────────────────────────── -->
+    <section class="closer" aria-labelledby="closer-title" data-reveal>
+      <h2 id="closer-title">Have a project<br /><span class="soft">in mind?</span></h2>
+      <p>Tell me what you're trying to build. I'll tell you honestly whether I'm the right fit — usually within a day.</p>
+      <div class="closer__actions">
+        <a href="/contact" class="btn">Start a project <span class="arr" aria-hidden="true">→</span></a>
+        <a href="mailto:info@jpxco.dev" class="link link-soft">info@jpxco.dev</a>
+        <a href="tel:+12247249020" class="link link-soft">(224) 724-9020</a>
       </div>
     </section>
   </div>
 </Base>
-
-<style>
-  .enq-link {
-    text-decoration: none;
-    color: inherit;
-    transition: color 0.18s ease;
-  }
-  .enq-link:hover {
-    color: var(--accent);
-  }
-</style>

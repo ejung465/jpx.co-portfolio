@@ -1,0 +1,48 @@
+---
+import CaseStudy from "@/layouts/CaseStudy.astro";
+import QuickEntryDemo from "@/components/QuickEntryDemo.astro";
+import { projects } from "@/data/projects";
+
+const project = projects.find((p) => p.slug === "ambry-calendar")!;
+---
+
+<CaseStudy project={project}>
+  <section class="case-block" aria-labelledby="try-title">
+    <h2 id="try-title" data-reveal>Try it</h2>
+    <div data-reveal>
+      <p class="case-lede" style="margin-bottom: 28px;">
+        The whole product hangs on one interaction. Here it is, running the same parser the app uses.
+      </p>
+      <QuickEntryDemo />
+    </div>
+  </section>
+
+  <div class="prose-case" data-reveal>
+    <h2>Why a grid</h2>
+    <p>
+      Ambry started as a spreadsheet: rows for days, columns for the parts of a life — school, practice, appointments,
+      personal. It worked better than any calendar app at the one thing calendars are supposed to do, which is showing
+      you an open day at a glance. But a spreadsheet doesn't sync, doesn't remind, and doesn't talk to a real calendar.
+    </p>
+    <p>
+      So the grid became the product, and every cell became an input. A typed line is a real, timed event the moment
+      you press return. Color carries status — confirmed, tentative, not going — rather than category, and a cancelled
+      entry is struck through instead of deleted, so the history stays honest.
+    </p>
+
+    <h2>Native, on purpose</h2>
+    <p>
+      The Mac and iPhone apps are SwiftUI rather than a wrapped website, because the details that make a calendar feel
+      fast — real pinch-to-zoom on the grid, trackpad panning, keyboard switching between views, system Face ID lock —
+      only exist natively. A full React web app talks to the same backend, so nothing is lost by opening it in a
+      browser instead.
+    </p>
+
+    <h2>Shipping in public</h2>
+    <p>
+      Ambry has gone from an empty repository to a native Mac and iPhone app, a web app, and a live marketing site,
+      across more than twenty versioned releases — each one logged in a changelog the app itself reads to show what's
+      new.
+    </p>
+  </div>
+</CaseStudy>

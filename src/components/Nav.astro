@@ -1,13 +1,20 @@
 ---
 // No link rail by design — this is a portfolio, not a product site.
-// The wordmark returns home; the one control books a call.
+// Wordmark home, a live availability note, one way to start a conversation.
 ---
 
-<nav class="site-nav mx-4 sm:mx-auto">
-  <a href="/" class="wordmark" aria-label="JPX Website Development Co. — home">
-    <span class="wordmark__jpx">JPX</span>
-    <span class="wordmark__co hidden sm:inline">Website Development Co.</span>
-  </a>
+<header class="site-header">
+  <nav class="site-nav" aria-label="Primary">
+    <a href="/" class="wordmark" aria-label="JPX Website Development Co. — home">
+      <span class="wordmark__jpx">JPX</span>
+      <span class="wordmark__co hidden md:inline">Website Development Co.</span>
+    </a>
 
-  <a href="/contact" class="btn-quiet btn">Book a call</a>
-</nav>
+    <p class="availability hidden lg:inline-flex">
+      <span class="availability__dot" aria-hidden="true"></span>
+      Available for new projects
+    </p>
+
+    <a href="/contact" class="btn btn-quiet">Start a project</a>
+  </nav>
+</header>

@@ -6,12 +6,34 @@ const project = projects.find((p) => p.slug === "alloy-mentors")!;
 ---
 
 <CaseStudy project={project}>
-  <div class="prose-case mt-20">
-    <h2>In development</h2>
+  <div class="prose-case" data-reveal>
+    <h2>Where it started</h2>
     <p>
-      Alloy Mentors is a mentorship application currently in design and engineering, heading for the App
-      Store. The full record of this engagement — the brief, the architecture, and the colophon — will be
-      published here at launch rather than sketched out in advance.
+      Alloy began as a volunteer hour-tracker for a single program. Hours turned out to be the least interesting thing
+      a mentoring program measures. What coordinators actually needed to show — to funders, to schools, to parents —
+      was whether the students were growing, and nothing they used recorded that.
+    </p>
+
+    <h2>What it became</h2>
+    <p>
+      So the product was rebuilt around the relationship between a mentor and a student. Every student gets goals with
+      checkpoints, a skills grid, and a timeline that fills in as sessions are logged. At the end of a term, that
+      record becomes a report a program can hand a funder, or a short plain-language note for a guardian — produced
+      from work that already happened, not assembled by hand in May.
+    </p>
+    <p>
+      Then it stopped being one program's tool. Any organization can now create itself inside the app, choose which
+      features it needs, and use its own words for its people. A tutoring business, a coaching club, and a school
+      volunteer program each see an app that looks like it was built for them, because in every way that matters,
+      it was.
+    </p>
+
+    <h2>Built for minors</h2>
+    <p>
+      Most participants in these programs are under eighteen, and that shaped the architecture more than any feature
+      did. Tenancy is enforced in the database rather than in the interface, student accounts see only their own
+      record, and check-in codes are signed on the device and expire within about a minute. Security work here isn't a phase at
+      the end — the access policies have been through an adversarial review, written up and fixed like any other bug.
     </p>
   </div>
 </CaseStudy>

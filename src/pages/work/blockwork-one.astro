@@ -1,0 +1,44 @@
+---
+import CaseStudy from "@/layouts/CaseStudy.astro";
+import StarterDemo from "@/components/StarterDemo.astro";
+import { projects } from "@/data/projects";
+
+const project = projects.find((p) => p.slug === "blockwork-one")!;
+---
+
+<CaseStudy project={project}>
+  <section class="case-block" aria-labelledby="try-title">
+    <h2 id="try-title" data-reveal>Try it</h2>
+    <div data-reveal>
+      <p class="case-lede" style="margin-bottom: 28px;">
+        The app starts with a starter: marks, set, a random hold, a beep. Here's the browser version — sound on.
+      </p>
+      <StarterDemo />
+    </div>
+  </section>
+
+  <div class="prose-case" data-reveal>
+    <h2>The problem with training alone</h2>
+    <p>
+      A block start lasts well under a second, and almost everything that matters in it is invisible from inside it:
+      where your hips sit in the set position, whether the front leg finishes its push, whether your first step lands
+      underneath you or in front. A coach sees it. A sprinter on their own sees nothing — and has nobody to call the
+      start in the first place.
+    </p>
+
+    <h2>Hands-free, by design</h2>
+    <p>
+      You can't hold a phone and get into blocks, so the whole loop runs without a touch. Prop it on its side, tap
+      Start, walk to your mark. It calls you up, waits until you've settled, calls set, holds a random interval, and
+      fires. By the time you've walked back, it has found the beep in the recording, tracked your body through the
+      start, scored the rep, and said out loud what to fix next.
+    </p>
+
+    <h2>Honest numbers</h2>
+    <p>
+      Every measure has a stated target range and a reason, and anything the camera can't measure reliably — like
+      reaction time, which reads later than a block sensor — is tracked rather than graded. When it's too dark to find
+      you, it says so and switches to a timed start instead of inventing a result.
+    </p>
+  </div>
+</CaseStudy>

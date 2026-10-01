@@ -1,59 +1,52 @@
 ---
-const year = 2026;
+import { projects } from "@/data/projects";
 
-// The footer carries navigation now that the header rail is gone.
-const links = [
-  { href: "/#work", label: "Work" },
-  { href: "/#principal", label: "Principal" },
-  { href: "/contact", label: "Contact" },
-];
+const year = 2026;
 ---
 
-<footer class="mt-24">
-  <div class="shell" style="border-top: 1px solid var(--glass-line);">
-    <!-- masthead -->
-    <div class="pt-20 text-center">
-      <p class="font-serif leading-none" style="font-size: 64px;">JPX</p>
-      <p
-        class="font-mono uppercase mt-4"
-        style="font-size: var(--t-micro); letter-spacing: 0.34em; color: var(--ink-faint);"
-      >
-        Website Development Co.
-      </p>
+<footer class="mt-32">
+  <div class="shell">
+    <div class="grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]" style="border-top: 1px solid var(--glass-line);">
+      <div>
+        <p class="font-serif leading-none" style="font-size: 56px;">JPX</p>
+        <p class="mt-3" style="font-size: var(--t-sm); color: var(--ink-soft);">Website Development Co.</p>
+        <p class="mt-6 max-w-[30ch]" style="font-size: var(--t-sm); color: var(--ink-faint);">
+          Websites, web apps, and native apps — designed and built by Ethan Jung.
+        </p>
+      </div>
+
+      <nav aria-label="Work">
+        <p style="font-size: var(--t-sm); color: var(--ink-faint);">Work</p>
+        <ul class="mt-3" style="font-size: var(--t-sm);">
+          {projects.map((p) => <li><a href={p.href} class="foot-link">{p.name}</a></li>)}
+        </ul>
+      </nav>
+
+      <nav aria-label="Studio">
+        <p style="font-size: var(--t-sm); color: var(--ink-faint);">Studio</p>
+        <ul class="mt-3" style="font-size: var(--t-sm);">
+          <li><a href="/#work" class="foot-link">Client work</a></li>
+          <li><a href="/#products" class="foot-link">Products</a></li>
+          <li><a href="/#principal" class="foot-link">About</a></li>
+          <li><a href="/contact" class="foot-link">Start a project</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <p style="font-size: var(--t-sm); color: var(--ink-faint);">Contact</p>
+        <ul class="mt-3" style="font-size: var(--t-sm);">
+          <li><a href="mailto:info@jpxco.dev" class="foot-link">info@jpxco.dev</a></li>
+          <li><a href="tel:+12247249020" class="foot-link">(224) 724-9020</a></li>
+        </ul>
+      </div>
     </div>
 
-    <!-- navigation + contact -->
     <div
-      class="mt-16 pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono uppercase"
-      style="border-top: 1px solid var(--glass-line); font-size: var(--t-micro); letter-spacing: var(--track-label); color: var(--ink-faint);"
+      class="flex flex-col sm:flex-row justify-between gap-2 py-8"
+      style="border-top: 1px solid var(--glass-line); font-size: var(--t-xs); color: var(--ink-faint);"
     >
-      <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-        {links.map((l) => <a href={l.href} class="foot-link">{l.label}</a>)}
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-        <a href="mailto:info@jpxco.dev" class="foot-link">info@jpxco.dev</a>
-        <a href="tel:+12247249020" class="foot-link">(224) 724-9020</a>
-      </div>
-    </div>
-
-    <!-- colophon line -->
-    <div class="py-12 text-center font-mono uppercase" style="color: var(--ink-faint);">
-      <p style="font-size: var(--t-micro); letter-spacing: var(--track-label);">
-        A product of JPX Website Development Co.
-      </p>
-      <p class="mt-2" style="font-size: var(--t-nano); letter-spacing: 0.26em; opacity: 0.72;">All rights reserved</p>
-      <p class="mt-3" style="font-size: var(--t-nano); letter-spacing: 0.26em; opacity: 0.72;">© {year}</p>
+      <p>© {year} JPX Website Development Co. All rights reserved.</p>
+      <p>Designed and built in-house — this site included.</p>
     </div>
   </div>
 </footer>
-
-<style>
-  .foot-link {
-    text-decoration: none;
-    color: inherit;
-    transition: color 0.18s ease;
-  }
-  .foot-link:hover {
-    color: var(--accent);
-  }
-</style>

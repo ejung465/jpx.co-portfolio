@@ -6,15 +6,14 @@ import { projects } from "@/data/projects";
 const project = projects.find((p) => p.slug === "in-the-beginning")!;
 
 /**
- * Client-facing twin of /work/in-the-beginning.
- *
- * Same record, same source of truth — the only difference is where the
- * return link points. Link to this route from inthebegin.org so visitors
- * arriving from the client site can get back to it; the portfolio route
- * keeps its own "Back to work" and never sends people off-site.
+ * Client-facing twin of /work/in-the-beginning, linked from inthebegin.org's
+ * credits. While that site is offline its return link would land on a 503, so
+ * this route uses the portfolio's own back link. Restore
+ * backLink={{ href: "https://inthebegin.org", label: "In The Beginning" }}
+ * if the site comes back.
  */
 ---
 
-<CaseStudy project={project} backLink={{ href: "https://inthebegin.org", label: "In The Beginning" }}>
+<CaseStudy project={project}>
   <Notes />
 </CaseStudy>

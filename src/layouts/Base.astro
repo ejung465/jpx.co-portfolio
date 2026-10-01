@@ -6,9 +6,11 @@ import "@/styles/global.css";
 interface Props {
   title: string;
   description: string;
+  /** a gold reading-progress hairline at the top of long pages */
+  progress?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, progress = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL("/images/og.jpg", Astro.site);
 ---
@@ -19,8 +21,9 @@ const ogImage = new URL("/images/og.jpg", Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0a0f1a" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/images/jpx-logo.png" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
 
     <title>{title}</title>
@@ -45,8 +48,14 @@ const ogImage = new URL("/images/og.jpg", Astro.site);
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Entrance motion is opt-in: content stays visible if scripts never run. -->
+    <script is:inline>document.documentElement.classList.add("js");</script>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {progress && <div class="read-progress" aria-hidden="true"></div>}
+
     <div class="bg-blueprint" aria-hidden="true">
       <div class="bg-blueprint__grid"></div>
       <div class="bg-cursor" id="bg-cursor"></div>
@@ -54,61 +63,167 @@ const ogImage = new URL("/images/og.jpg", Astro.site);
     </div>
 
     <Nav />
-    <main>
+    <main id="main">
       <slot />
     </main>
     <Footer />
 
     <script>
-      // Pointer-reactive backdrop: the golden grid and glow trail the cursor.
-      // Eased rather than pinned 1:1 — the lag is what makes it read as material
-      // rather than as a cursor attachment. Parks the rAF loop once it settles so
-      // an idle tab isn't burning frames.
+      const fine = window.matchMedia("(pointer: fine)").matches;
+      const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // ── Pointer-reactive backdrop ────────────────────────────────────
+      // The golden grid trails the cursor, eased rather than pinned 1:1 — the
+      // lag is what makes it read as material instead of a cursor attachment.
+      // The loop parks itself once settled so an idle tab burns no frames.
       (() => {
         const layer = document.getElementById("bg-cursor");
-        if (!layer) return;
+        if (!layer || !fine || calm) return;
 
-        const fine = window.matchMedia("(pointer: fine)");
-        const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
-        if (!fine.matches || calm.matches) return;
-
-        let targetX = window.innerWidth / 2;
-        let targetY = window.innerHeight / 2;
-        let x = targetX;
-        let y = targetY;
+        let tx = innerWidth / 2;
+        let ty = innerHeight / 2;
+        let x = tx;
+        let y = ty;
         let frame = 0;
         let lit = false;
 
         const draw = () => {
-          x += (targetX - x) * 0.14;
-          y += (targetY - y) * 0.14;
+          x += (tx - x) * 0.14;
+          y += (ty - y) * 0.14;
           layer.style.setProperty("--mx", x.toFixed(1) + "px");
           layer.style.setProperty("--my", y.toFixed(1) + "px");
-
-          // settled — stop drawing until the pointer moves again
-          if (Math.abs(targetX - x) < 0.4 && Math.abs(targetY - y) < 0.4) {
+          if (Math.abs(tx - x) < 0.4 && Math.abs(ty - y) < 0.4) {
             frame = 0;
             return;
           }
           frame = requestAnimationFrame(draw);
         };
 
-        const onMove = (event) => {
-          targetX = event.clientX;
-          targetY = event.clientY;
-          if (!lit) {
-            lit = true;
-            x = targetX;
-            y = targetY;
-            layer.classList.add("is-lit");
+        addEventListener(
+          "pointermove",
+          (e) => {
+            tx = e.clientX;
+            ty = e.clientY;
+            if (!lit) {
+              lit = true;
+              x = tx;
+              y = ty;
+              layer.classList.add("is-lit");
+            }
+            if (!frame) frame = requestAnimationFrame(draw);
+          },
+          { passive: true },
+        );
+        document.addEventListener("pointerleave", () => layer.classList.remove("is-lit"));
+        document.addEventListener("pointerenter", () => lit && layer.classList.add("is-lit"));
+      })();
+
+      // ── Nav gains its glass only once the page has moved ─────────────
+      (() => {
+        const nav = document.querySelector(".site-nav");
+        if (!nav) return;
+        const sentinel = document.createElement("div");
+        sentinel.style.cssText = "position:absolute;top:0;height:24px;width:1px;pointer-events:none";
+        document.body.prepend(sentinel);
+        new IntersectionObserver(([entry]) => nav.classList.toggle("is-stuck", !entry.isIntersecting)).observe(
+          sentinel,
+        );
+      })();
+
+      // ── Reveal on scroll ─────────────────────────────────────────────
+      // Siblings that enter together stagger by their --i index.
+      (() => {
+        const items = document.querySelectorAll<HTMLElement>("[data-reveal]");
+        if (calm || !("IntersectionObserver" in window)) {
+          items.forEach((el) => el.classList.add("is-in"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add("is-in");
+              io.unobserve(entry.target);
+            }
+          },
+          { rootMargin: "0px 0px -12% 0px" },
+        );
+        items.forEach((el) => io.observe(el));
+      })();
+
+      // ── Index: a preview that follows the pointer ────────────────────
+      // Position is spring-eased toward the cursor; the card leans into the
+      // direction of travel by an amount proportional to horizontal velocity,
+      // so a fast flick tilts it and a slow drift barely moves it.
+      (() => {
+        const index = document.querySelector<HTMLElement>("[data-index]");
+        const card = document.querySelector<HTMLElement>(".index-preview");
+        if (!index || !card || !fine || calm) return;
+
+        const imgs = new Map<string, HTMLImageElement>();
+        card.querySelectorAll<HTMLImageElement>("img[data-slug]").forEach((img) => imgs.set(img.dataset.slug!, img));
+
+        const w = () => card.offsetWidth;
+        const h = () => card.offsetHeight;
+        let tx = 0;
+        let ty = 0;
+        let x = 0;
+        let y = 0;
+        let r = 0;
+        let frame = 0;
+        let active = false;
+
+        const draw = () => {
+          const dx = tx - x;
+          x += dx * 0.16;
+          y += (ty - y) * 0.16;
+          const lean = Math.max(-9, Math.min(9, dx * 0.06));
+          r += (lean - r) * 0.2;
+          card.style.setProperty("--px", (x - w() / 2).toFixed(1) + "px");
+          card.style.setProperty("--py", (y - h() - 28).toFixed(1) + "px");
+          card.style.setProperty("--pr", r.toFixed(2) + "deg");
+          if (!active && Math.abs(dx) < 0.3 && Math.abs(r) < 0.05) {
+            frame = 0;
+            return;
           }
-          if (!frame) frame = requestAnimationFrame(draw);
+          frame = requestAnimationFrame(draw);
         };
 
-        window.addEventListener("pointermove", onMove, { passive: true });
-        document.addEventListener("pointerleave", () => layer.classList.remove("is-lit"));
-        document.addEventListener("pointerenter", () => {
-          if (lit) layer.classList.add("is-lit");
+        const show = (slug: string) => {
+          imgs.forEach((img, key) => img.classList.toggle("is-on", key === slug));
+        };
+
+        index.querySelectorAll<HTMLElement>("[data-slug]").forEach((row) => {
+          row.addEventListener("pointerenter", (e) => {
+            if (!active) {
+              x = tx = e.clientX;
+              y = ty = e.clientY;
+            }
+            active = true;
+            show(row.dataset.slug!);
+            card.classList.add("is-on");
+            if (!frame) frame = requestAnimationFrame(draw);
+          });
+        });
+        index.addEventListener("pointermove", (e) => {
+          tx = e.clientX;
+          ty = e.clientY;
+        });
+        index.addEventListener("pointerleave", () => {
+          active = false;
+          card.classList.remove("is-on");
+        });
+      })();
+
+      // ── Product tiles: a light that follows the pointer ──────────────
+      (() => {
+        if (!fine || calm) return;
+        document.querySelectorAll<HTMLElement>(".tile").forEach((tile) => {
+          tile.addEventListener("pointermove", (e) => {
+            const box = tile.getBoundingClientRect();
+            tile.style.setProperty("--tx", e.clientX - box.left + "px");
+            tile.style.setProperty("--ty", e.clientY - box.top + "px");
+          });
         });
       })();
     </script>
