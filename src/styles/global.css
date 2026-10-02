@@ -309,10 +309,12 @@
     min-height: 44px;
     align-items: center;
   }
-  .wordmark__jpx {
-    font-family: "Instrument Serif", Georgia, serif;
-    font-size: var(--t-xl);
-    line-height: 1;
+  /* the crossmark: J and P in ink, the diamond and "co" in gold */
+  .wordmark__logo {
+    display: block;
+    height: 40px;
+    width: auto;
+    flex: none;
   }
   .wordmark__co {
     font-size: var(--t-sm);
