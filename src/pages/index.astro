@@ -7,7 +7,7 @@ import { projects, clientWork, products } from "@/data/projects";
 const statusKey = {
   "In service": "index__status--live",
   "In development": "index__status--dev",
-  Offline: "index__status--offline",
+  "Under maintenance": "index__status--maint",
 } as const;
 
 const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]));

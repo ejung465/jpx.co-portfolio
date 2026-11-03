@@ -36,6 +36,9 @@
     --warn: #d9a441;
     --warn-soft: rgba(217, 164, 65, 0.12);
     --warn-line: rgba(217, 164, 65, 0.3);
+    --maint: #e8853d;
+    --maint-soft: rgba(232, 133, 61, 0.12);
+    --maint-line: rgba(232, 133, 61, 0.3);
     --danger: #d9635e;
     --danger-soft: rgba(217, 99, 94, 0.12);
     --danger-line: rgba(217, 99, 94, 0.3);
@@ -617,8 +620,8 @@
   .index__status--dev i {
     background: var(--warn);
   }
-  .index__status--offline i {
-    background: var(--danger);
+  .index__status--maint i {
+    background: var(--maint);
   }
   .index__cat,
   .index__plat,
@@ -1110,10 +1113,10 @@
     background: var(--warn-soft);
     border-color: var(--warn-line);
   }
-  .status--offline {
-    color: var(--danger);
-    background: var(--danger-soft);
-    border-color: var(--danger-line);
+  .status--maint {
+    color: var(--maint);
+    background: var(--maint-soft);
+    border-color: var(--maint-line);
   }
 
   /* ── principal ── */

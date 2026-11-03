@@ -14,7 +14,7 @@ export type Project = {
   year: string;
   /** where it runs — "Web", "iPhone & Android", … */
   platforms: string;
-  status: "In service" | "In development" | "Offline";
+  status: "In service" | "In development" | "Under maintenance";
   /** shown on the case study when a site is no longer reachable */
   statusNote?: string;
   /** shown in the browser chrome bar */
@@ -138,9 +138,7 @@ export const projects: Project[] = [
       "Public site and volunteer operations platform for a student-led nonprofit supporting refugee and displaced youth — intake, a review queue, a roster, and an editorial pipeline, all run by volunteers with no developer in the loop.",
     year: "2026",
     platforms: "Web",
-    status: "Offline",
-    statusNote:
-      "The site was taken offline at the organization's request following internal changes on their side. The build and its administrative tooling are unaffected; the capture below is the site as delivered.",
+    status: "Under maintenance",
     displayUrl: "inthebegin.org",
     image: "/images/shots/in-the-beginning.jpg",
     imageAlt: "The In The Beginning homepage, as delivered",
@@ -364,5 +362,5 @@ export function nextProject(slug: string): Project {
 export const statusClass: Record<Project["status"], string> = {
   "In service": "status status--live",
   "In development": "status status--dev",
-  Offline: "status status--offline",
+  "Under maintenance": "status status--maint",
 };
