@@ -36,6 +36,9 @@
     --warn: #d9a441;
     --warn-soft: rgba(217, 164, 65, 0.12);
     --warn-line: rgba(217, 164, 65, 0.3);
+    --early: #6ea8f5;
+    --early-soft: rgba(110, 168, 245, 0.12);
+    --early-line: rgba(110, 168, 245, 0.3);
     --maint: #e8853d;
     --maint-soft: rgba(232, 133, 61, 0.12);
     --maint-line: rgba(232, 133, 61, 0.3);
@@ -617,6 +620,9 @@
   .index__status--live i {
     background: var(--ok);
   }
+  .index__status--early i {
+    background: var(--early);
+  }
   .index__status--dev i {
     background: var(--warn);
   }
@@ -1108,6 +1114,11 @@
     background: var(--ok-soft);
     border-color: var(--ok-line);
   }
+  .status--early {
+    color: var(--early);
+    background: var(--early-soft);
+    border-color: var(--early-line);
+  }
   .status--dev {
     color: var(--warn);
     background: var(--warn-soft);
@@ -1313,12 +1324,22 @@
     margin-top: 28px;
     padding: 16px 20px;
     border-radius: var(--r-md);
-    border: 1px solid var(--danger-line);
-    background: var(--danger-soft);
+    border: 1px solid var(--early-line);
+    background: var(--early-soft);
     color: var(--ink-soft);
     font-size: var(--t-sm);
     line-height: 1.7;
     max-width: 66ch;
+  }
+  .status-note a {
+    color: var(--early);
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-color: var(--early-line);
+    text-underline-offset: 3px;
+  }
+  .status-note a:hover {
+    text-decoration-color: currentColor;
   }
 
   .case-block {

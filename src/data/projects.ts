@@ -14,9 +14,11 @@ export type Project = {
   year: string;
   /** where it runs — "Web", "iPhone & Android", … */
   platforms: string;
-  status: "In service" | "In development" | "Under maintenance";
-  /** shown on the case study when a site is no longer reachable */
+  status: "In service" | "Early release" | "In development" | "Under maintenance";
+  /** a line of context under the case-study spec, e.g. how early a release is */
   statusNote?: string;
+  /** App Store listing, linked from the status note */
+  appStore?: string;
   /** shown in the browser chrome bar */
   displayUrl: string;
   /** live site — previews link here */
@@ -302,7 +304,10 @@ export const projects: Project[] = [
       "Set the phone beside the blocks. It calls the start, films at 240 frames a second, runs pose estimation on the device, and speaks the one to three things to fix before you've walked back.",
     year: "2026",
     platforms: "iPhone",
-    status: "In development",
+    status: "Early release",
+    statusNote:
+      "Version 1 is live on the App Store, and it's early days — new builds ship regularly as feedback from real training sessions comes in.",
+    appStore: "https://apps.apple.com/us/app/blockwork-one/id6816577202",
     displayUrl: "blockworkone.com",
     external: "https://blockworkone.com",
     image: "/images/shots/blockwork-one.jpg",
@@ -318,7 +323,7 @@ export const projects: Project[] = [
         "A sprinter training alone has no one to call the start, no way to see their own set position, and no timing better than a stopwatch. Blockwork One turns an iPhone propped beside the lane into the starter, a high-speed camera, and a coach — scoring the set, the push, and the first steps of every rep against the athlete's own best, without them touching the phone.",
       scope: "Product, design & engineering",
       practice: "JPX product",
-      delivered: "In TestFlight",
+      delivered: "On the App Store",
     },
     stack: ["Swift", "SwiftUI", "AVFoundation", "Vision", "SwiftData", "StoreKit 2", "React", "Vite", "Vercel"],
     colophon: [
@@ -344,7 +349,7 @@ export const projects: Project[] = [
       },
       {
         title: "Release",
-        body: "TestFlight builds are signed and uploaded from CI, and every screen is re-rendered on a simulator by the pipeline, so store screenshots never drift from the shipping interface.",
+        body: "Builds are signed and uploaded to TestFlight and the App Store from CI, and every screen is re-rendered on a simulator by the pipeline, so store screenshots never drift from the shipping interface.",
       },
     ],
   },
@@ -361,6 +366,7 @@ export function nextProject(slug: string): Project {
 
 export const statusClass: Record<Project["status"], string> = {
   "In service": "status status--live",
+  "Early release": "status status--early",
   "In development": "status status--dev",
   "Under maintenance": "status status--maint",
 };

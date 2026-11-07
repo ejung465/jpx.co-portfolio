@@ -64,7 +64,21 @@ const kindLabel = project.kind === "product" ? "JPX product" : "Client work";
         </div>
       </dl>
 
-      {project.statusNote && <p class="status-note">{project.statusNote}</p>}
+      {
+        project.statusNote && (
+          <p class="status-note">
+            {project.statusNote}
+            {project.appStore && (
+              <>
+                {" "}
+                <a href={project.appStore} target="_blank" rel="noopener">
+                  View on the App Store ↗
+                </a>
+              </>
+            )}
+          </p>
+        )
+      }
     </header>
 
     <!-- ── Hero capture: morphs from the homepage frame ─────── -->
